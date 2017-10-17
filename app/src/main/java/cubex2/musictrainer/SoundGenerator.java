@@ -22,7 +22,7 @@ public class SoundGenerator
         this.sampleRate = sampleRate;
     }
 
-    public SoundGenerator addTone(int frequency, float duration)
+    public SoundGenerator addTone(double frequency, float duration)
     {
         tones.add(new Tone(frequency, duration));
         return this;
@@ -54,10 +54,10 @@ public class SoundGenerator
             samples += (int) (tone.duration * sampleRate);
         }
 
-        return samples + (int)(sampleRate * RAMP_DURATION);
+        return samples + (int) (sampleRate * RAMP_DURATION);
     }
 
-    private void generateTone(int frequency, float duration)
+    private void generateTone(double frequency, float duration)
     {
         final int samples = (int) (duration * sampleRate);
         final int firstSample = sampleIdx;
@@ -105,10 +105,10 @@ public class SoundGenerator
 
     private static class Tone
     {
-        final int frequency;
+        final double frequency;
         final float duration;
 
-        Tone(int frequency, float duration)
+        Tone(double frequency, float duration)
         {
             this.frequency = frequency;
             this.duration = duration;

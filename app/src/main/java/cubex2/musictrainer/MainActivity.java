@@ -30,14 +30,11 @@ public class MainActivity extends AppCompatActivity
     void playSound()
     {
         SoundGenerator generator = new SoundGenerator(sampleRate);
-        generator.addTone(261, 0.5f);
-        generator.addTone(293, 0.5f);
-        generator.addTone(329, 0.5f);
-        generator.addTone(349, 0.5f);
-        generator.addTone(391, 0.5f);
-        generator.addTone(440, 0.5f);
-        generator.addTone(493, 0.5f);
-        generator.addTone(523, 0.5f);
+        Scale scale = Scale.major(Tone.forKeyNumber(40));
+        for (Tone tone : scale.getTones())
+        {
+            generator.addTone(tone.getFrequency(), 0.5f);
+        }
 
         byte[] sound = generator.generate();
 
