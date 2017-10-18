@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">MusicTrainer</string>
-    <string name="button_play">Play Sound!!!</string>
+    <string name="button_play">Play Sound</string>
 </resources>

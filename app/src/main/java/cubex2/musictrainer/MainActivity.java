@@ -5,7 +5,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements SoundPlayer.OnFinishListener
 {
     private Button button;
 
@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity
         button = (Button) findViewById(R.id.play_button);
         button.setOnClickListener(view -> {
             // Use a new tread as this can take a while
+            button.setEnabled(false);
             final Thread thread = new Thread(() -> handler.post(this::playSound));
             thread.start();
         });
@@ -39,6 +40,13 @@ public class MainActivity extends AppCompatActivity
         byte[] sound = generator.generate();
 
         SoundPlayer player = new SoundPlayer(sound, sampleRate);
+        player.addOnFinishListener(this);
         player.play();
+    }
+
+    @Override
+    public void finished(SoundPlayer player)
+    {
+        button.setEnabled(true);
     }
 }

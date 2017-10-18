@@ -4,10 +4,14 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class SoundPlayer implements AudioTrack.OnPlaybackPositionUpdateListener
 {
     private final byte[] sound;
     private final AudioTrack audioTrack;
+    private final List<OnFinishListener> finishListeners = new LinkedList<>();
 
     public SoundPlayer(byte[] sound, int sampleRate)
     {
@@ -20,6 +24,11 @@ public class SoundPlayer implements AudioTrack.OnPlaybackPositionUpdateListener
         audioTrack.setNotificationMarkerPosition(sound.length / 2 - (sampleRate / 20));
         audioTrack.setPlaybackPositionUpdateListener(this);
         writeSoundToTrack();
+    }
+
+    public void addOnFinishListener(OnFinishListener listener)
+    {
+        finishListeners.add(listener);
     }
 
     private void writeSoundToTrack()
@@ -46,11 +55,21 @@ public class SoundPlayer implements AudioTrack.OnPlaybackPositionUpdateListener
     {
         audioTrack.stop();
         audioTrack.reloadStaticData();
+
+        for (OnFinishListener listener : finishListeners)
+        {
+            listener.finished(this);
+        }
     }
 
     @Override
     public void onPeriodicNotification(AudioTrack audioTrack)
     {
 
+    }
+
+    interface OnFinishListener
+    {
+        void finished(SoundPlayer player);
     }
 }
