@@ -14,9 +14,9 @@ public class Quiz
     private final Set<Integer> errorIndices;
     private final float[] durations;
 
-    public Quiz()
+    public Quiz(int maxErrors)
     {
-        int numErrors = 1;
+        int numErrors = Util.randomInRange(1, maxErrors);
 
         scale = Scale.major(Tone.forKeyNumber(40));
         errorIndices = computeErrorIndices(numErrors, 0, scale.getTones().size() - 1);
