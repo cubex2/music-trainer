@@ -98,12 +98,16 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
         boolean scales = Settings.useScales(this);
         boolean arpeggios = Settings.useArpeggios(this);
 
+        int minTone = Settings.getMinimumStartToneKey(this);
+        int maxTone = Settings.getMaximumStartToneKey(this);
+        int startTone = Util.randomInRange(minTone, maxTone);
+
         if (scales && (!arpeggios || Util.randomBoolean()))
         {
-            sequence = Scale.major(Tone.forKeyNumber(40));
+            sequence = Scale.major(Tone.forKeyNumber(startTone));
         } else
         {
-            sequence = Arpeggio.major(Tone.forKeyNumber(40));
+            sequence = Arpeggio.major(Tone.forKeyNumber(startTone));
         }
 
         return new Quiz(sequence, maxErrors);

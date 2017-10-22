@@ -34,4 +34,14 @@ public class Settings
 
         return values.contains("arpeggio");
     }
+
+    public static int getMinimumStartToneKey(Context context)
+    {
+        return 10;
+    }
+
+    public static int getMaximumStartToneKey(Context context)
+    {
+        return 70;
+    }
 }
