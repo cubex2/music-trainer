@@ -38,4 +38,18 @@ public class Util
         return result;
     }
 
+    public static String join(Iterable<String> values, String delimiter)
+    {
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        for (String value : values)
+        {
+            if (i > 0)
+                sb.append(delimiter);
+            sb.append(value);
+            i++;
+        }
+        return sb.toString();
+    }
+
 }

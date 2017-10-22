@@ -4,16 +4,19 @@ package cubex2.musictrainer.config;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.*;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
+import android.widget.Toast;
 import cubex2.musictrainer.MainActivity;
 import cubex2.musictrainer.R;
+import cubex2.musictrainer.Util;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -52,6 +55,32 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                         ? listPreference.getEntries()[index]
                         : null);
 
+            } else if (preference instanceof MultiSelectListPreference)
+            {
+                MultiSelectListPreference listPreference = (MultiSelectListPreference) preference;
+                Set<String> setValue = (Set<String>) value;
+
+                if (setValue.isEmpty())
+                {
+                    Context context = preference.getContext();
+                    Toast toast = Toast.makeText(context, context.getString(R.string.pref_sequence_types_invalid_selection), Toast.LENGTH_SHORT);
+                    toast.show();
+                    return false;
+                }
+
+                List<String> displayValues = new ArrayList<>(setValue.size());
+                for (String s : setValue)
+                {
+                    int index = listPreference.findIndexOfValue(s);
+                    displayValues.add(
+                            index >= 0
+                            ? listPreference.getEntries()[index].toString()
+                            : "");
+                }
+                Collections.sort(displayValues);
+
+                preference.setSummary(Util.join(displayValues, ", "));
+
             } else
             {
                 // For all other preferences, set the summary to the value's
@@ -83,15 +112,23 @@ public class SettingsActivity extends AppCompatPreferenceActivity
      */
     private static void bindPreferenceSummaryToValue(Preference preference)
     {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
+
         // Set the listener to watch for value changes.
         preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
+        Object value;
+        if (preference instanceof MultiSelectListPreference)
+        {
+            value = preferences.getStringSet(preference.getKey(), new HashSet<>());
+        } else
+        {
+            value = preferences.getString(preference.getKey(), "");
+        }
+
         // Trigger the listener immediately with the preference's
         // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                                                                 PreferenceManager
-                                                                         .getDefaultSharedPreferences(preference.getContext())
-                                                                         .getString(preference.getKey(), ""));
+        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, value);
     }
 
     @Override
@@ -170,6 +207,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_errors_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sequence_types_key)));
         }
 
         @Override
