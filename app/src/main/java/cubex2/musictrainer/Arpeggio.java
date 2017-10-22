@@ -1,11 +1,11 @@
 package cubex2.musictrainer;
 
-public class Scale extends ToneSequence
+public class Arpeggio extends ToneSequence
 {
-    private static final int[] MAJOR_OFFSETS = {2, 2, 1, 2, 2, 2, 1};
-    private static final int[] MINOR_OFFSETS = {2, 1, 2, 2, 1, 2, 2};
+    private static final int[] MAJOR_OFFSETS = {4, 3, 5, 4, 3, 5};
+    private static final int[] MINOR_OFFSETS = {3, 4, 5, 3, 4, 5};
 
-    private Scale(Iterable<Tone> tones)
+    private Arpeggio(Iterable<Tone> tones)
     {
         super(tones);
     }

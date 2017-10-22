@@ -18,6 +18,11 @@ public class Util
         return RANDOM.nextInt(max - min + 1) + min;
     }
 
+    public static boolean randomBoolean()
+    {
+        return RANDOM.nextBoolean();
+    }
+
     public static int[] toSortedArray(Set<Integer> set)
     {
         int[] result = new int[set.size()];

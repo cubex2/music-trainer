@@ -10,28 +10,28 @@ public class Quiz
     private static final float MIN_DURATION_ERROR = 0.1f;
     private static final float MAX_DURATION_ERROR = 0.25f;
 
-    private final Scale scale;
+    private final ToneSequence toneSequence;
     private final Set<Integer> errorIndices;
     private final float[] durations;
 
-    public Quiz(int maxErrors)
+    public Quiz(ToneSequence sequence, int maxErrors)
     {
         int numErrors = Util.randomInRange(1, maxErrors);
 
-        scale = Scale.major(Tone.forKeyNumber(40));
-        errorIndices = computeErrorIndices(numErrors, 0, scale.getTones().size() - 1);
-        durations = createDurations(scale.getTones().size());
+        toneSequence = sequence;
+        errorIndices = computeErrorIndices(numErrors, 0, toneSequence.getTones().size() - 1);
+        durations = createDurations(toneSequence.getTones().size());
     }
 
     public int getNumTones()
     {
-        return scale.getTones().size();
+        return toneSequence.getTones().size();
     }
 
     public void addTones(SoundGenerator generator)
     {
         int i = 0;
-        for (Tone tone : scale.getTones())
+        for (Tone tone : toneSequence.getTones())
         {
             generator.addTone(tone.getFrequency(), durations[i++]);
         }

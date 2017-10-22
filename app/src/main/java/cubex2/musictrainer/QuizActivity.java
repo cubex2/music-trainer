@@ -2,10 +2,8 @@ package cubex2.musictrainer;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import cubex2.musictrainer.config.Settings;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,10 +34,7 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int maxErrors = Integer.valueOf(preferences.getString(getString(R.string.pref_max_errors_key), "1"));
-
-        quiz = new Quiz(maxErrors);
+        quiz = createQuiz();
 
         player = createSoundPlayer();
 
@@ -60,7 +56,7 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
             @Override
             public int getCount()
             {
-                return 8;
+                return quiz.getNumTones();
             }
 
             @Override
@@ -93,6 +89,24 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
                 return cb;
             }
         });
+    }
+
+    private Quiz createQuiz()
+    {
+        ToneSequence sequence;
+        int maxErrors = Settings.getMaxErrors(this);
+        boolean scales = Settings.useScales(this);
+        boolean arpeggios = Settings.useArpeggios(this);
+
+        if (scales && (!arpeggios || Util.randomBoolean()))
+        {
+            sequence = Scale.major(Tone.forKeyNumber(40));
+        } else
+        {
+            sequence = Arpeggio.major(Tone.forKeyNumber(40));
+        }
+
+        return new Quiz(sequence, maxErrors);
     }
 
     private SoundPlayer createSoundPlayer()
