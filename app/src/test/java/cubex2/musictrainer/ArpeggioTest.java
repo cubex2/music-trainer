@@ -1,5 +1,8 @@
 package cubex2.musictrainer;
 
+import cubex2.musictrainer.data.Arpeggio;
+import cubex2.musictrainer.data.Tone;
+import cubex2.musictrainer.data.ToneSequence;
 import org.junit.Test;
 
 import java.util.List;

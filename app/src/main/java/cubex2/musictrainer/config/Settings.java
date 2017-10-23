@@ -35,6 +35,24 @@ public class Settings
         return values.contains("arpeggio");
     }
 
+    public static boolean useDurationErrors(Context context)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.pref_error_types_key);
+        Set<String> values = preferences.getStringSet(key, Collections.emptySet());
+
+        return values.contains("duration");
+    }
+
+    public static boolean useFrequencyErrors(Context context)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.pref_error_types_key);
+        Set<String> values = preferences.getStringSet(key, Collections.emptySet());
+
+        return values.contains("frequency");
+    }
+
     public static int getMinimumStartToneKey(Context context)
     {
         return 10;

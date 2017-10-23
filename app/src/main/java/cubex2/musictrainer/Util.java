@@ -23,6 +23,11 @@ public class Util
         return RANDOM.nextBoolean();
     }
 
+    public static int randomSign()
+    {
+        return RANDOM.nextBoolean() ? 1 : -1;
+    }
+
     public static int[] toSortedArray(Set<Integer> set)
     {
         int[] result = new int[set.size()];

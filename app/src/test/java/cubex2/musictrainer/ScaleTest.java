@@ -1,7 +1,9 @@
 package cubex2.musictrainer;
 
+import cubex2.musictrainer.data.Scale;
+import cubex2.musictrainer.data.Tone;
+import cubex2.musictrainer.data.ToneSequence;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.List;
 

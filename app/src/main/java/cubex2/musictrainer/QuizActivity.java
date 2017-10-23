@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
 import cubex2.musictrainer.config.Settings;
+import cubex2.musictrainer.data.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -97,6 +98,8 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
         int maxErrors = Settings.getMaxErrors(this);
         boolean scales = Settings.useScales(this);
         boolean arpeggios = Settings.useArpeggios(this);
+        boolean durationErrors = Settings.useDurationErrors(this);
+        boolean frequencyErrors = Settings.useFrequencyErrors(this);
 
         int minTone = Settings.getMinimumStartToneKey(this);
         int maxTone = Settings.getMaximumStartToneKey(this);
@@ -110,7 +113,7 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
             sequence = Arpeggio.major(Tone.forKeyNumber(startTone));
         }
 
-        return new Quiz(sequence, maxErrors);
+        return new Quiz(sequence, maxErrors, durationErrors, frequencyErrors);
     }
 
     private SoundPlayer createSoundPlayer()

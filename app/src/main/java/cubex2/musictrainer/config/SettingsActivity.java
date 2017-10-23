@@ -63,7 +63,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                 if (setValue.isEmpty())
                 {
                     Context context = preference.getContext();
-                    Toast toast = Toast.makeText(context, context.getString(R.string.pref_sequence_types_invalid_selection), Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(context, context.getString(R.string.multi_select_invalid_selection), Toast.LENGTH_SHORT);
                     toast.show();
                     return false;
                 }
@@ -72,10 +72,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                 for (String s : setValue)
                 {
                     int index = listPreference.findIndexOfValue(s);
-                    displayValues.add(
-                            index >= 0
-                            ? listPreference.getEntries()[index].toString()
-                            : "");
+                    if (index >= 0)
+                    {
+                        displayValues.add(listPreference.getEntries()[index].toString());
+                    }
                 }
                 Collections.sort(displayValues);
 
@@ -208,6 +208,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             // guidelines.
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_errors_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sequence_types_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_error_types_key)));
         }
 
         @Override

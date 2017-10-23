@@ -1,5 +1,6 @@
 package cubex2.musictrainer;
 
+import cubex2.musictrainer.data.Tone;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

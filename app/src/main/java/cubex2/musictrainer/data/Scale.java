@@ -1,4 +1,4 @@
-package cubex2.musictrainer;
+package cubex2.musictrainer.data;
 
 public class Scale extends ToneSequence
 {

@@ -14,8 +14,14 @@
                                android:title="@string/pref_sequence_types"
                                android:defaultValue="@array/pref_sequence_types_values"
                                android:entries="@array/pref_sequence_types_entries"
-                               android:entryValues="@array/pref_sequence_types_values"
-    >
+                               android:entryValues="@array/pref_sequence_types_values">
+    </MultiSelectListPreference>
+
+    <MultiSelectListPreference android:key="@string/pref_error_types_key"
+                               android:title="@string/pref_error_types"
+                               android:defaultValue="@array/pref_error_types_values"
+                               android:entries="@array/pref_error_types_entries"
+                               android:entryValues="@array/pref_error_types_values">
     </MultiSelectListPreference>
 
 </PreferenceScreen>

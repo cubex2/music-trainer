@@ -1,4 +1,4 @@
-package cubex2.musictrainer;
+package cubex2.musictrainer.data;
 
 import java.util.ArrayList;
 import java.util.Collections;

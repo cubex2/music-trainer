@@ -10,6 +10,7 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
+    <string name="multi_select_invalid_selection">Invalid selection!</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
@@ -34,5 +35,16 @@
         <item>Scale</item>
         <item>Arpeggio</item>
     </string-array>
-    <string name="pref_sequence_types_invalid_selection">Invalid selection!</string>
+
+
+    <string name="pref_error_types_key">error_types</string>
+    <string name="pref_error_types">Error Types</string>
+    <string-array name="pref_error_types_values">
+        <item>duration</item>
+        <item>frequency</item>
+    </string-array>
+    <string-array name="pref_error_types_entries">
+        <item>Tone duration</item>
+        <item>Tone frequency</item>
+    </string-array>
 </resources>

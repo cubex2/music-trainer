@@ -1,4 +1,7 @@
-package cubex2.musictrainer;
+package cubex2.musictrainer.data;
+
+import cubex2.musictrainer.SoundGenerator;
+import cubex2.musictrainer.Util;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,31 +12,48 @@ public class Quiz
     private static final float TONE_DURATION = 0.5f;
     private static final float MIN_DURATION_ERROR = 0.1f;
     private static final float MAX_DURATION_ERROR = 0.25f;
+    private static final int MIN_FREQUENCY_ERROR = 1;
+    private static final int MAX_FREQUENCY_ERROR = 2;
 
-    private final ToneSequence toneSequence;
+    private final boolean useDurationErrors;
+    private final boolean useFrequencyErrors;
     private final Set<Integer> errorIndices;
-    private final float[] durations;
+    private Tone[] tones;
+    private float[] durations;
 
-    public Quiz(ToneSequence sequence, int maxErrors)
+    public Quiz(ToneSequence sequence, int maxErrors, boolean useDurationErrors, boolean useFrequencyErrors)
     {
+        this.useDurationErrors = useDurationErrors;
+        this.useFrequencyErrors = useFrequencyErrors;
         int numErrors = Util.randomInRange(1, maxErrors);
 
-        toneSequence = sequence;
-        errorIndices = computeErrorIndices(numErrors, 0, toneSequence.getTones().size() - 1);
-        durations = createDurations(toneSequence.getTones().size());
+        errorIndices = computeErrorIndices(numErrors, 0, sequence.getTones().size() - 1);
+
+        initErrors(sequence);
+    }
+
+    private void initErrors(ToneSequence sequence)
+    {
+        int numTones = sequence.getTones().size();
+        tones = sequence.getTones().toArray(new Tone[numTones]);
+        durations = new float[numTones];
+
+        Arrays.fill(durations, TONE_DURATION);
+
+        applyErrors(errorIndices);
     }
 
     public int getNumTones()
     {
-        return toneSequence.getTones().size();
+        return tones.length;
     }
 
     public void addTones(SoundGenerator generator)
     {
-        int i = 0;
-        for (Tone tone : toneSequence.getTones())
+        for (int i = 0; i < tones.length; i++)
         {
-            generator.addTone(tone.getFrequency(), durations[i++]);
+            Tone tone = tones[i];
+            generator.addTone(tone.getFrequency(), durations[i]);
         }
     }
 
@@ -63,28 +83,20 @@ public class Quiz
                           Util.toSortedArray(errorIndices));
     }
 
-    private float[] createDurations(int num)
-    {
-        float[] result = new float[num];
-        Arrays.fill(result, TONE_DURATION);
-
-        result = applyErrors(result, errorIndices);
-
-        return result;
-    }
-
-    private float[] applyErrors(float[] durations, Set<Integer> errorIndices)
+    private void applyErrors(Set<Integer> errorIndices)
     {
         for (Integer index : errorIndices)
         {
-            float error = Util.randomInRange(MIN_DURATION_ERROR, MAX_DURATION_ERROR);
-            if (Util.RANDOM.nextBoolean())
+            if (useDurationErrors && (!useFrequencyErrors || Util.randomBoolean()))
+            {
+                float error = Util.randomSign() * Util.randomInRange(MIN_DURATION_ERROR, MAX_DURATION_ERROR);
                 durations[index] += error;
-            else
-                durations[index] -= error;
+            } else
+            {
+                int error = Util.randomSign() * Util.randomInRange(MIN_FREQUENCY_ERROR, MAX_FREQUENCY_ERROR);
+                tones[index] = Tone.forKeyNumber(tones[index].getKeyNumber() + error);
+            }
         }
-
-        return durations;
     }
 
     private Set<Integer> computeErrorIndices(int num, int minIndex, int maxIndex)
