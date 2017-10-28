@@ -1,6 +1,5 @@
-package cubex2.musictrainer;
+package cubex2.musictrainer.data;
 
-import cubex2.musictrainer.data.Tone;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,10 +28,10 @@ public class ToneTest
     @Test
     public void numberForOcatve() throws Exception
     {
-        assertEquals(2,Tone.numberForOctave(0));
-        assertEquals(2,Tone.numberForOctave(5));
-        assertEquals(0,Tone.numberForOctave(3));
-        assertEquals(5,Tone.numberForOctave(8));
+        assertEquals(2, Tone.numberForOctave(0));
+        assertEquals(2, Tone.numberForOctave(5));
+        assertEquals(0, Tone.numberForOctave(3));
+        assertEquals(5, Tone.numberForOctave(8));
     }
 
     @Test
@@ -54,8 +53,8 @@ public class ToneTest
     @Test
     public void insertNumber() throws Exception
     {
-        assertEquals("a1", Tone.insertNumber("a",1));
-        assertEquals("cis2/des2", Tone.insertNumber("cis/des",2));
+        assertEquals("a1", Tone.insertNumber("a", 1));
+        assertEquals("cis2/des2", Tone.insertNumber("cis/des", 2));
     }
 
     @Test

@@ -1,5 +1,9 @@
 package cubex2.musictrainer;
 
+import android.support.annotation.Nullable;
+
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
@@ -55,6 +59,20 @@ public class Util
             i++;
         }
         return sb.toString();
+    }
+
+    public static void closeQuietly(@Nullable Closeable closeable)
+    {
+        if (closeable != null)
+        {
+            try
+            {
+                closeable.close();
+            } catch (IOException ignore)
+            {
+
+            }
+        }
     }
 
 }

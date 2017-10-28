@@ -1,4 +1,4 @@
-package cubex2.musictrainer;
+package cubex2.musictrainer.data;
 
 import cubex2.musictrainer.data.Arpeggio;
 import cubex2.musictrainer.data.Tone;

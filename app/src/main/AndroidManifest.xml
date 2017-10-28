@@ -17,14 +17,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".QuizActivity">
-
         </activity>
         <activity
                 android:name=".config.SettingsActivity"
                 android:label="@string/title_activity_settings"
                 android:parentActivityName=".MainActivity">
         </activity>
-
+        <activity android:name=".StatsActivity">
+        </activity>
     </application>
 
 </manifest>

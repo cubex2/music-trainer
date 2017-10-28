@@ -1,7 +1,9 @@
 package cubex2.musictrainer;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,8 @@ import android.widget.CheckBox;
 import android.widget.GridView;
 import cubex2.musictrainer.config.Settings;
 import cubex2.musictrainer.data.*;
+import cubex2.musictrainer.stats.StatContract;
+import cubex2.musictrainer.stats.StatDbHelper;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -171,8 +175,24 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
         return builder.create();
     }
 
+    private void updateStats()
+    {
+        StatDbHelper helper = new StatDbHelper(this);
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(StatContract.StatEntry.COLUMN_NAME_TIMESTAMP, System.currentTimeMillis());
+
+        db.insert(StatContract.StatEntry.TABEL_NAME, null, values);
+
+        helper.close();
+    }
+
     private void nextQuiz()
     {
+        updateStats();
+
         Intent intent = new Intent(this, QuizActivity.class);
         startActivity(intent);
         finish();
