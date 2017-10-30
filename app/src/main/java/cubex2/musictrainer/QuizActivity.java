@@ -170,12 +170,12 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
             builder.setMessage(getResources().getString(R.string.quiz_incorrect, sb.toString()));
         }
 
-        builder.setPositiveButton(R.string.button_ok, (dialogInterface, i) -> nextQuiz());
+        builder.setPositiveButton(R.string.button_ok, (dialogInterface, i) -> nextQuiz(report));
 
         return builder.create();
     }
 
-    private void updateStats()
+    private void updateStats(Quiz.Report report)
     {
         StatDbHelper helper = new StatDbHelper(this);
 
@@ -183,15 +183,16 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
 
         ContentValues values = new ContentValues();
         values.put(StatContract.StatEntry.COLUMN_NAME_TIMESTAMP, System.currentTimeMillis());
+        values.put(StatContract.StatEntry.COLUMN_NAME_CORRECT, !report.hasMistakes());
 
         db.insert(StatContract.StatEntry.TABEL_NAME, null, values);
 
         helper.close();
     }
 
-    private void nextQuiz()
+    private void nextQuiz(Quiz.Report report)
     {
-        updateStats();
+        updateStats(report);
 
         Intent intent = new Intent(this, QuizActivity.class);
         startActivity(intent);

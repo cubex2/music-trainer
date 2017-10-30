@@ -16,6 +16,7 @@ import java.util.List;
 public class StatsActivity extends AppCompatActivity
 {
     private TextView tvStatCount;
+    private TextView tvCorrectCount;
     private StatDbHelper dbHelper;
 
     @Override
@@ -26,8 +27,13 @@ public class StatsActivity extends AppCompatActivity
 
         dbHelper = new StatDbHelper(this);
 
+        String loadingString = getString(R.string.stat_loading);
+
         tvStatCount = (TextView) findViewById(R.id.count_tv);
-        tvStatCount.setText(getString(R.string.stat_count, "Loading..."));
+        tvStatCount.setText(getString(R.string.stat_count, loadingString));
+
+        tvCorrectCount = (TextView) findViewById(R.id.correct_tv);
+        tvCorrectCount.setText(getString(R.string.correct_count, loadingString));
 
         new ReadDbTask().execute();
     }
@@ -40,7 +46,8 @@ public class StatsActivity extends AppCompatActivity
             SQLiteDatabase db = dbHelper.getReadableDatabase();
 
             String[] projection = {
-                    StatContract.StatEntry.COLUMN_NAME_TIMESTAMP
+                    StatContract.StatEntry.COLUMN_NAME_TIMESTAMP,
+                    StatContract.StatEntry.COLUMN_NAME_CORRECT
             };
 
             String sortOrder = StatContract.StatEntry.COLUMN_NAME_TIMESTAMP + " DESC";
@@ -57,9 +64,7 @@ public class StatsActivity extends AppCompatActivity
             List<StatEntry> entries = new LinkedList<>();
             while (cursor.moveToNext())
             {
-                long timeStamp = cursor.getLong(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_TIMESTAMP));
-
-                entries.add(new StatEntry(timeStamp));
+                entries.add(readEntry(cursor));
             }
 
             cursor.close();
@@ -67,10 +72,37 @@ public class StatsActivity extends AppCompatActivity
             return entries;
         }
 
+        private StatEntry readEntry(Cursor cursor)
+        {
+            long timeStamp = cursor.getLong(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_TIMESTAMP));
+            boolean wasCorrect = cursor.getInt(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_CORRECT)) == 1;
+
+            return new StatEntry(timeStamp, wasCorrect);
+        }
+
         @Override
         protected void onPostExecute(List<StatEntry> statEntries)
         {
-            tvStatCount.setText(getString(R.string.stat_count, String.valueOf(statEntries.size())));
+            int finished = statEntries.size();
+            int correct = getCorrectCount(statEntries);
+
+            int percentCorrect = (int) (correct / (float) finished * 100);
+
+            tvStatCount.setText(getString(R.string.stat_count, String.valueOf(finished)));
+            tvCorrectCount.setText(getString(R.string.correct_count, correct + " (" + percentCorrect + "%)"));
+        }
+
+        private int getCorrectCount(List<StatEntry> statEntries)
+        {
+            int count = 0;
+
+            for (StatEntry entry : statEntries)
+            {
+                if (entry.isWasCorrect())
+                    count++;
+            }
+
+            return count;
         }
     }
 }

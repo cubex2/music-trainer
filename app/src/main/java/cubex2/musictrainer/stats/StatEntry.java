@@ -3,14 +3,21 @@ package cubex2.musictrainer.stats;
 public class StatEntry
 {
     private long timeStamp;
+    private boolean wasCorrect;
 
-    public StatEntry(long timeStamp)
+    public StatEntry(long timeStamp, boolean wasCorrect)
     {
         this.timeStamp = timeStamp;
+        this.wasCorrect = wasCorrect;
     }
 
     private StatEntry()
     {
+    }
+
+    public boolean isWasCorrect()
+    {
+        return wasCorrect;
     }
 
     @Override

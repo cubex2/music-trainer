@@ -11,6 +11,8 @@
     <string name="button_reset">Reset</string>
     <string name="stat_count">Finished: %1$s</string>
     <string name="button_stats">Statistics</string>
+    <string name="correct_count">Correct: %1$s</string>
+    <string name="stat_loading">Loading…</string>
 
     <!-- Strings related to Settings -->
     <string name="multi_select_invalid_selection">Invalid selection!</string>

@@ -11,7 +11,8 @@ public class StatDbHelper extends SQLiteOpenHelper
 
     private static final String SQL_CREATE_STATS = "CREATE TABLE " + StatContract.StatEntry.TABEL_NAME + " (" +
                                                    StatContract.StatEntry._ID + " INTEGER PRIMARY KEY," +
-                                                   StatContract.StatEntry.COLUMN_NAME_TIMESTAMP + " INTEGER)";
+                                                   StatContract.StatEntry.COLUMN_NAME_TIMESTAMP + " INTEGER," +
+                                                   StatContract.StatEntry.COLUMN_NAME_CORRECT + " INTEGER)";
 
     private static final String SQL_DELETE_STATS = "DROP TABLE IF EXISTS " + StatContract.StatEntry.TABEL_NAME;
 
@@ -29,7 +30,8 @@ public class StatDbHelper extends SQLiteOpenHelper
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-
+        db.execSQL(SQL_DELETE_STATS);
+        db.execSQL(SQL_CREATE_STATS);
     }
 
     @Override

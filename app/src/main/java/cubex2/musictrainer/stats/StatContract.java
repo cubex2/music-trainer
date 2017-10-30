@@ -10,5 +10,6 @@ public final class StatContract
     {
         public static final String TABEL_NAME = "stat";
         public static final String COLUMN_NAME_TIMESTAMP = "time";
+        public static final String COLUMN_NAME_CORRECT = "correct";
     }
 }
