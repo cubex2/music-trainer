@@ -15,7 +15,8 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginLeft="8dp" app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp" android:onClick="onResetClicked"
+            android:enabled="false"/>
     <TextView
             android:text="@string/stat_count"
             android:layout_width="wrap_content"
