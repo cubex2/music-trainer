@@ -66,4 +66,14 @@ public class ToneTest
         assertEquals("ais4/b4", Tone.keyName(86));
         assertEquals("H", Tone.keyName(27));
     }
+
+    @Test
+    public void fileName() throws Exception
+    {
+        assertEquals("c0", Tone.fileName(-8));
+        assertEquals("ab0", Tone.fileName(0));
+        assertEquals("c4", Tone.fileName(40));
+        assertEquals("bb7", Tone.fileName(86));
+        assertEquals("b2", Tone.fileName(27));
+    }
 }

@@ -1,5 +1,7 @@
 package cubex2.musictrainer.data;
 
+import android.content.Context;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,12 +25,15 @@ public class Tone
     private final int keyNumber;
     private final double frequency;
     private final String keyName;
+    private final String fileName;
+    private Integer resourceId = null;
 
     private Tone(int keyNumber)
     {
         this.keyNumber = keyNumber;
         this.frequency = pianoFrequency(keyNumber);
         this.keyName = keyName(keyNumber);
+        this.fileName = fileName(keyNumber);
     }
 
     public int getKeyNumber()
@@ -46,9 +51,32 @@ public class Tone
         return keyName;
     }
 
+    public int getResourceId(Context context)
+    {
+        if (resourceId == null)
+            resourceId = context.getResources().getIdentifier("piano_ff_" + fileName, "raw", context.getPackageName());
+
+        return resourceId;
+    }
+
     static double pianoFrequency(int keyNumber)
     {
         return Math.pow(2, (keyNumber - 49) / (double) TONES_PER_OCTAVE) * 440;
+    }
+
+    static String fileName(int keyNumber)
+    {
+        final String[] names = new String[]
+                {
+                        "c", "db", "d", "eb", "e", "f", "gb", "g", "ab", "a", "bb", "b",
+                };
+
+        int octave = octave(keyNumber);
+        int ocatveOffset = octaveOffset(keyNumber);
+
+        String name = names[ocatveOffset];
+
+        return name + octave;
     }
 
     static String keyName(int keyNumber)

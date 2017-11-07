@@ -1,75 +1,109 @@
 package cubex2.musictrainer;
 
-import android.media.AudioFormat;
+import android.content.Context;
 import android.media.AudioManager;
-import android.media.AudioTrack;
+import android.media.SoundPool;
+import cubex2.musictrainer.data.Quiz;
+import cubex2.musictrainer.data.Tone;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class SoundPlayer implements AudioTrack.OnPlaybackPositionUpdateListener
+public class SoundPlayer implements SoundPool.OnLoadCompleteListener
 {
-    private final byte[] sound;
-    private final AudioTrack audioTrack;
-    private final List<OnFinishListener> finishListeners = new LinkedList<>();
+    private SoundPool soundPool;
+    private int[] soundIDs;
+    private int[] durations;
+    private OnLoadCompleteListener loadListener;
+    private OnPlayCompleteListener playListener;
+    private Timer timer = new Timer();
 
-    public SoundPlayer(byte[] sound, int sampleRate)
+    private int numLoaded = 0;
+
+    public SoundPlayer(Context context, Quiz quiz)
     {
-        this.sound = sound;
+        soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        soundPool.setOnLoadCompleteListener(this);
 
-        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-                                    sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-                                    AudioFormat.ENCODING_PCM_16BIT, sound.length,
-                                    AudioTrack.MODE_STATIC);
-        audioTrack.setNotificationMarkerPosition(sound.length / 2 - (sampleRate / 20));
-        audioTrack.setPlaybackPositionUpdateListener(this);
-        writeSoundToTrack();
-    }
-
-    public void addOnFinishListener(OnFinishListener listener)
-    {
-        finishListeners.add(listener);
-    }
-
-    private void writeSoundToTrack()
-    {
-        int written = 0;
-        while (written < sound.length)
+        soundIDs = new int[quiz.getNumTones()];
+        durations = new int[quiz.getNumTones()];
+        for (int i = 0; i < soundIDs.length; i++)
         {
-            written = audioTrack.write(sound, written, sound.length - written);
+            Tone tone = quiz.getTone(i);
+            soundIDs[i] = soundPool.load(context, tone.getResourceId(context), 1);
+            durations[i] = quiz.getToneDuration(i);
         }
+    }
+
+    public void setOnLoadCompleteListener(OnLoadCompleteListener loadListener)
+    {
+        this.loadListener = loadListener;
+    }
+
+    public void setOnPlayCompleteListener(OnPlayCompleteListener playListener)
+    {
+        this.playListener = playListener;
     }
 
     public void play()
     {
-        audioTrack.play();
-    }
+        int delay = 0;
+        for (int i = 0; i < soundIDs.length; i++)
+        {
+            final int j = i;
+            timer.schedule(new TimerTask()
+            {
+                @Override
+                public void run()
+                {
+                    soundPool.play(soundIDs[j], 1f, 1f, 1, 0, 1f);
+                }
+            }, delay);
+            timer.schedule(new TimerTask()
+            {
+                @Override
+                public void run()
+                {
+                    soundPool.stop(soundIDs[j]);
+                }
+            }, delay + durations[i] + 50);
 
-    public void release()
-    {
-        audioTrack.release();
+            delay += durations[i];
+        }
+
+        timer.schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                if (playListener != null)
+                {
+                    playListener.playbackComplete();
+                }
+            }
+        }, delay + 50);
     }
 
     @Override
-    public void onMarkerReached(AudioTrack audioTrack)
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status)
     {
-        audioTrack.stop();
-        audioTrack.reloadStaticData();
-
-        for (OnFinishListener listener : finishListeners)
+        numLoaded++;
+        if (numLoaded == soundIDs.length)
         {
-            listener.finished(this);
+            if (loadListener != null)
+            {
+                loadListener.onLoadComplete();
+            }
         }
     }
 
-    @Override
-    public void onPeriodicNotification(AudioTrack audioTrack)
+    public interface OnLoadCompleteListener
     {
-
+        void onLoadComplete();
     }
 
-    interface OnFinishListener
+    public interface OnPlayCompleteListener
     {
-        void finished(SoundPlayer player);
+        void playbackComplete();
     }
 }

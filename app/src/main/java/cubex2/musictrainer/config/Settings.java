@@ -55,11 +55,11 @@ public class Settings
 
     public static int getMinimumStartToneKey(Context context)
     {
-        return 10;
+        return 30;
     }
 
     public static int getMaximumStartToneKey(Context context)
     {
-        return 70;
+        return 50;
     }
 }

@@ -1,6 +1,5 @@
 package cubex2.musictrainer.data;
 
-import cubex2.musictrainer.SoundGenerator;
 import cubex2.musictrainer.Util;
 
 import java.util.Arrays;
@@ -48,13 +47,14 @@ public class Quiz
         return tones.length;
     }
 
-    public void addTones(SoundGenerator generator)
+    public Tone getTone(int index)
     {
-        for (int i = 0; i < tones.length; i++)
-        {
-            Tone tone = tones[i];
-            generator.addTone(tone.getFrequency(), durations[i]);
-        }
+        return tones[index];
+    }
+
+    public int getToneDuration(int index)
+    {
+        return (int) (durations[index] * 1000);
     }
 
     /**

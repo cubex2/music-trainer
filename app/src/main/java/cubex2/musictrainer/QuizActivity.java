@@ -21,17 +21,16 @@ import cubex2.musictrainer.stats.StatDbHelper;
 import java.util.HashSet;
 import java.util.Set;
 
-public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFinishListener
+public class QuizActivity extends AppCompatActivity
 {
     private Button btnPlay;
     private Button btnSubmit;
     private GridView gridView;
 
-    private SoundPlayer player;
-    private final int sampleRate = 44100;
-
     private Quiz quiz;
     Handler handler = new Handler();
+
+    private SoundPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,8 +39,12 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
         setContentView(R.layout.activity_quiz);
 
         quiz = createQuiz();
-
-        player = createSoundPlayer();
+        player = new SoundPlayer(this, quiz);
+        player.setOnLoadCompleteListener(() -> btnPlay.setEnabled(true));
+        player.setOnPlayCompleteListener(() -> handler.post(() -> {
+            btnPlay.setEnabled(true);
+            btnSubmit.setEnabled(true);
+        }));
 
         btnPlay = (Button) findViewById(R.id.play_button);
         btnPlay.setOnClickListener(view -> {
@@ -50,6 +53,7 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
             final Thread thread = new Thread(() -> handler.post(this::playSound));
             thread.start();
         });
+        btnPlay.setEnabled(false);
 
         btnSubmit = (Button) findViewById(R.id.submit_button);
         btnSubmit.setOnClickListener(view -> submit());
@@ -118,19 +122,6 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
         }
 
         return new Quiz(sequence, maxErrors, durationErrors, frequencyErrors);
-    }
-
-    private SoundPlayer createSoundPlayer()
-    {
-        SoundGenerator generator = new SoundGenerator(sampleRate);
-        quiz.addTones(generator);
-
-        byte[] sound = generator.generate();
-
-        SoundPlayer player = new SoundPlayer(sound, sampleRate);
-        player.addOnFinishListener(this);
-
-        return player;
     }
 
     private void submit()
@@ -202,12 +193,5 @@ public class QuizActivity extends AppCompatActivity implements SoundPlayer.OnFin
     void playSound()
     {
         player.play();
-    }
-
-    @Override
-    public void finished(SoundPlayer player)
-    {
-        btnPlay.setEnabled(true);
-        btnSubmit.setEnabled(true);
     }
 }
