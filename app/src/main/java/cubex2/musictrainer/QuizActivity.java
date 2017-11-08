@@ -41,7 +41,7 @@ public class QuizActivity extends AppCompatActivity
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         quiz = createQuiz();
-        player = new SoundPlayer(this, quiz);
+        player = new SoundPlayer(this, quiz.getTones());
         player.setOnLoadCompleteListener(() -> btnPlay.setEnabled(true));
         player.setOnPlayCompleteListener(() -> handler.post(() -> {
             btnPlay.setEnabled(true);

@@ -3,7 +3,7 @@ package cubex2.musictrainer;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import cubex2.musictrainer.data.Quiz;
+import cubex2.musictrainer.data.PlayableTone;
 import cubex2.musictrainer.data.Tone;
 
 import java.util.Timer;
@@ -20,18 +20,20 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
 
     private int numLoaded = 0;
 
-    public SoundPlayer(Context context, Quiz quiz)
+    public SoundPlayer(Context context, PlayableTone[] tones)
     {
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         soundPool.setOnLoadCompleteListener(this);
 
-        soundIDs = new int[quiz.getNumTones()];
-        durations = new int[quiz.getNumTones()];
+        soundIDs = new int[tones.length];
+        durations = new int[tones.length];
         for (int i = 0; i < soundIDs.length; i++)
         {
-            Tone tone = quiz.getTone(i);
+            Tone tone = tones[i].getTone();
+            float duration = tones[i].getDuration();
+
             soundIDs[i] = soundPool.load(context, tone.getResourceId(context), 1);
-            durations[i] = quiz.getToneDuration(i);
+            durations[i] = (int) (duration * 1000);
         }
     }
 
