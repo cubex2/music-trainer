@@ -45,8 +45,15 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
         this.playListener = playListener;
     }
 
-    public void play()
+    public void play(Context context)
     {
+        AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        float actualVolume = (float) audioManager
+                .getStreamVolume(AudioManager.STREAM_MUSIC);
+        float maxVolume = (float) audioManager
+                .getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        float volume = actualVolume / maxVolume;
+
         int delay = 0;
         for (int i = 0; i < soundIDs.length; i++)
         {
@@ -56,7 +63,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
                 @Override
                 public void run()
                 {
-                    soundPool.play(soundIDs[j], 1f, 1f, 1, 0, 1f);
+                    soundPool.play(soundIDs[j], volume, volume, 1, 0, 1f);
                 }
             }, delay);
             timer.schedule(new TimerTask()

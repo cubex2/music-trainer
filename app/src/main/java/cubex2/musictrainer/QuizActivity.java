@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ public class QuizActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         quiz = createQuiz();
         player = new SoundPlayer(this, quiz);
@@ -192,6 +194,6 @@ public class QuizActivity extends AppCompatActivity
 
     void playSound()
     {
-        player.play();
+        player.play(this);
     }
 }
