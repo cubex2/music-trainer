@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import cubex2.musictrainer.R;
+import cubex2.musictrainer.data.ErrorType;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class Settings
@@ -35,22 +38,22 @@ public class Settings
         return values.contains("arpeggio");
     }
 
-    public static boolean useDurationErrors(Context context)
+    public static List<ErrorType> getActiveErrors(Context context)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String key = context.getString(R.string.pref_error_types_key);
         Set<String> values = preferences.getStringSet(key, Collections.emptySet());
 
-        return values.contains("duration");
-    }
+        List<ErrorType> list = new ArrayList<>();
 
-    public static boolean useFrequencyErrors(Context context)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String key = context.getString(R.string.pref_error_types_key);
-        Set<String> values = preferences.getStringSet(key, Collections.emptySet());
+        if (values.contains("duration"))
+            list.add(ErrorType.DURATION);
+        if (values.contains("frequency"))
+            list.add(ErrorType.FREQUENCY);
+        if (values.contains("volume"))
+            list.add(ErrorType.VOLUME);
 
-        return values.contains("frequency");
+        return list;
     }
 
     public static int getMinimumStartToneKey(Context context)

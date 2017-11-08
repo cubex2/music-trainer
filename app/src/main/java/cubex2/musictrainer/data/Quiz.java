@@ -3,25 +3,21 @@ package cubex2.musictrainer.data;
 import cubex2.musictrainer.Util;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Quiz
 {
     private static final float TONE_DURATION = 0.5f;
-    private static final float MIN_DURATION_ERROR = 0.1f;
-    private static final float MAX_DURATION_ERROR = 0.25f;
-    private static final int MIN_FREQUENCY_ERROR = 1;
-    private static final int MAX_FREQUENCY_ERROR = 2;
+    private static final float TONE_VOLUME = 1f;
 
-    private final boolean useDurationErrors;
-    private final boolean useFrequencyErrors;
     private final Set<Integer> errorIndices;
+    private final List<ErrorType> activeErrors;
     private PlayableTone[] tones;
 
-    public Quiz(ToneSequence sequence, int maxErrors, boolean useDurationErrors, boolean useFrequencyErrors)
+    public Quiz(ToneSequence sequence, int maxErrors, List<ErrorType> activeErrors)
     {
-        this.useDurationErrors = useDurationErrors;
-        this.useFrequencyErrors = useFrequencyErrors;
+        this.activeErrors = activeErrors;
         int numErrors = Util.randomInRange(1, maxErrors);
 
         errorIndices = computeErrorIndices(numErrors, 0, sequence.getTones().size() - 1);
@@ -35,7 +31,7 @@ public class Quiz
         tones = new PlayableTone[numTones];
         for (int i = 0; i < tones.length; i++)
         {
-            tones[i] = new PlayableTone(sequence.getTones().get(i), TONE_DURATION);
+            tones[i] = new PlayableTone(sequence.getTones().get(i), TONE_DURATION, TONE_VOLUME);
         }
 
         applyErrors(errorIndices);
@@ -82,16 +78,8 @@ public class Quiz
         for (Integer index : errorIndices)
         {
             PlayableTone tone = tones[index];
-
-            if (useDurationErrors && (!useFrequencyErrors || Util.randomBoolean()))
-            {
-                float error = Util.randomSign() * Util.randomInRange(MIN_DURATION_ERROR, MAX_DURATION_ERROR);
-                tone.setDuration(tone.getDuration() + error);
-            } else
-            {
-                int error = Util.randomSign() * Util.randomInRange(MIN_FREQUENCY_ERROR, MAX_FREQUENCY_ERROR);
-                tone.setTone(Tone.forKeyNumber(tone.getTone().getKeyNumber() + error));
-            }
+            ErrorType error = Util.randomElement(activeErrors);
+            error.apply(tone);
         }
     }
 

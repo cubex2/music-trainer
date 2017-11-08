@@ -4,11 +4,13 @@ public class PlayableTone
 {
     private Tone tone;
     private float duration;
+    private float volume;
 
-    public PlayableTone(Tone tone, float duration)
+    public PlayableTone(Tone tone, float duration, float volume)
     {
         this.tone = tone;
         this.duration = duration;
+        this.volume = volume;
     }
 
     public Tone getTone()
@@ -29,5 +31,15 @@ public class PlayableTone
     void setDuration(float duration)
     {
         this.duration = duration;
+    }
+
+    public float getVolume()
+    {
+        return volume;
+    }
+
+    void setVolume(float volume)
+    {
+        this.volume = volume;
     }
 }

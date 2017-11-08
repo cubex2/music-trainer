@@ -20,6 +20,7 @@ import cubex2.musictrainer.stats.StatContract;
 import cubex2.musictrainer.stats.StatDbHelper;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class QuizActivity extends AppCompatActivity
@@ -108,8 +109,7 @@ public class QuizActivity extends AppCompatActivity
         int maxErrors = Settings.getMaxErrors(this);
         boolean scales = Settings.useScales(this);
         boolean arpeggios = Settings.useArpeggios(this);
-        boolean durationErrors = Settings.useDurationErrors(this);
-        boolean frequencyErrors = Settings.useFrequencyErrors(this);
+        List<ErrorType> activeErrors = Settings.getActiveErrors(this);
 
         int minTone = Settings.getMinimumStartToneKey(this);
         int maxTone = Settings.getMaximumStartToneKey(this);
@@ -123,7 +123,7 @@ public class QuizActivity extends AppCompatActivity
             sequence = Arpeggio.major(Tone.forKeyNumber(startTone));
         }
 
-        return new Quiz(sequence, maxErrors, durationErrors, frequencyErrors);
+        return new Quiz(sequence, maxErrors, activeErrors);
     }
 
     private void submit()

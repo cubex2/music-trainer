@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
@@ -30,6 +31,13 @@ public class Util
     public static int randomSign()
     {
         return RANDOM.nextBoolean() ? 1 : -1;
+    }
+
+    public static <T> T randomElement(List<T> list)
+    {
+        int index = randomInRange(0, list.size() - 1);
+
+        return list.get(index);
     }
 
     public static int[] toSortedArray(Set<Integer> set)

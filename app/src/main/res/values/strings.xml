@@ -10,7 +10,6 @@
     <string name="title_activity_settings">Settings</string>
 
 
-
     <!-- Stats -->
     <string name="stat_loading">Loading…</string>
     <string name="button_reset">Reset</string>
@@ -52,9 +51,11 @@
     <string-array name="pref_error_types_values">
         <item>duration</item>
         <item>frequency</item>
+        <item>volume</item>
     </string-array>
     <string-array name="pref_error_types_entries">
         <item>Tone duration</item>
         <item>Tone frequency</item>
+        <item>Tone Volume</item>
     </string-array>
 </resources>
