@@ -34,6 +34,17 @@
         <item>5</item>
     </string-array>
 
+    <string name="pref_num_tones_key">num_tones</string>
+    <string name="pref_num_tones">Num Tones</string>
+    <string-array name="pref_num_tones_list_values">
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+
     <string name="pref_sequence_types_key">seq_types</string>
     <string name="pref_sequence_types">Sequence Types</string>
     <string-array name="pref_sequence_types_values">

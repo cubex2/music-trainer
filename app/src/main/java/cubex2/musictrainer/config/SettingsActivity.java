@@ -209,6 +209,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_errors_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sequence_types_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_error_types_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_num_tones_key)));
         }
 
         @Override

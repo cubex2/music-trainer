@@ -10,13 +10,13 @@ public class Scale extends ToneSequence
         super(tones);
     }
 
-    public static ToneSequence major(Tone startTone)
+    public static ToneSequence major(Tone startTone, int numTones)
     {
-        return fromOffsets(startTone, MAJOR_OFFSETS);
+        return fromOffsets(startTone, numTones, MAJOR_OFFSETS);
     }
 
-    public static ToneSequence minor(Tone startTone)
+    public static ToneSequence minor(Tone startTone, int numTones)
     {
-        return fromOffsets(startTone, MINOR_OFFSETS);
+        return fromOffsets(startTone, numTones, MINOR_OFFSETS);
     }
 }

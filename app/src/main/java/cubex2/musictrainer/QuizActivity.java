@@ -107,6 +107,7 @@ public class QuizActivity extends AppCompatActivity
     {
         ToneSequence sequence;
         int maxErrors = Settings.getMaxErrors(this);
+        int numTones = Settings.getNumTones(this);
         boolean scales = Settings.useScales(this);
         boolean arpeggios = Settings.useArpeggios(this);
         List<ErrorType> activeErrors = Settings.getActiveErrors(this);
@@ -117,10 +118,10 @@ public class QuizActivity extends AppCompatActivity
 
         if (scales && (!arpeggios || Util.randomBoolean()))
         {
-            sequence = Scale.major(Tone.forKeyNumber(startTone));
+            sequence = Scale.major(Tone.forKeyNumber(startTone), numTones);
         } else
         {
-            sequence = Arpeggio.major(Tone.forKeyNumber(startTone));
+            sequence = Arpeggio.major(Tone.forKeyNumber(startTone), numTones);
         }
 
         return new Quiz(sequence, maxErrors, activeErrors);

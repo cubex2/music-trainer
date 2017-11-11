@@ -38,6 +38,13 @@ public class Settings
         return values.contains("arpeggio");
     }
 
+    public static int getNumTones(Context context)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.pref_num_tones_key);
+        return Integer.valueOf(preferences.getString(key, "8"));
+    }
+
     public static List<ErrorType> getActiveErrors(Context context)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

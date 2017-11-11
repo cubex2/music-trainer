@@ -14,7 +14,7 @@ public class ScaleTest
     @Test
     public void major() throws Exception
     {
-        ToneSequence scale = Scale.major(Tone.forKeyNumber(40)); // c major
+        ToneSequence scale = Scale.major(Tone.forKeyNumber(40),8); // c major
 
         List<Tone> tones = scale.getTones();
 
@@ -32,7 +32,7 @@ public class ScaleTest
      @Test
     public void minor() throws Exception
     {
-        ToneSequence scale = Scale.minor(Tone.forKeyNumber(40)); // c major
+        ToneSequence scale = Scale.minor(Tone.forKeyNumber(40),8); // c major
 
         List<Tone> tones = scale.getTones();
 

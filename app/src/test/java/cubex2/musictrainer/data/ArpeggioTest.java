@@ -14,7 +14,7 @@ public class ArpeggioTest
     @Test
     public void major() throws Exception
     {
-        ToneSequence scale = Arpeggio.major(Tone.forKeyNumber(40)); // c major
+        ToneSequence scale = Arpeggio.major(Tone.forKeyNumber(40), 7); // c major
 
         List<Tone> tones = scale.getTones();
 
@@ -31,7 +31,7 @@ public class ArpeggioTest
     @Test
     public void minor() throws Exception
     {
-        ToneSequence scale = Arpeggio.minor(Tone.forKeyNumber(40)); // c minor
+        ToneSequence scale = Arpeggio.minor(Tone.forKeyNumber(40),7); // c minor
 
         List<Tone> tones = scale.getTones();
 

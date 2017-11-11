@@ -17,6 +17,16 @@
                                android:entryValues="@array/pref_sequence_types_values">
     </MultiSelectListPreference>
 
+    <ListPreference android:key="num_tones"
+                    android:title="@string/pref_num_tones"
+                    android:defaultValue="8"
+                    android:entries="@array/pref_num_tones_list_values"
+                    android:entryValues="@array/pref_num_tones_list_values"
+                    android:negativeButtonText="@null"
+                    android:positiveButtonText="@null">
+
+    </ListPreference>
+
     <MultiSelectListPreference android:key="@string/pref_error_types_key"
                                android:title="@string/pref_error_types"
                                android:defaultValue="@array/pref_error_types_values"

@@ -22,15 +22,15 @@ public class ToneSequence
         return Collections.unmodifiableList(tones);
     }
 
-    protected static ToneSequence fromOffsets(Tone startTone, int[] semiToneOffsets)
+    protected static ToneSequence fromOffsets(Tone startTone, int numTones, int[] semiToneOffsets)
     {
         List<Tone> tones = new LinkedList<>();
 
         tones.add(startTone);
         Tone prevTone = startTone;
-        for (int toneOffset : semiToneOffsets)
+        for (int i = 0; i < numTones-1; i++)
         {
-            Tone tone = Tone.forKeyNumber(prevTone.getKeyNumber() + toneOffset);
+            Tone tone = Tone.forKeyNumber(prevTone.getKeyNumber() + semiToneOffsets[i]);
             tones.add(tone);
 
             prevTone = tone;
