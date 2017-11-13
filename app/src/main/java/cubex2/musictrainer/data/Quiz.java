@@ -78,8 +78,10 @@ public class Quiz
         for (Integer index : errorIndices)
         {
             PlayableTone tone = tones[index];
+            PlayableTone prevTone = index == 0 ? null : tones[index - 1];
+            PlayableTone nextTone = index == tones.length - 1 ? null : tones[index + 1];
             ErrorType error = Util.randomElement(activeErrors);
-            error.apply(tone);
+            error.apply(tone, prevTone, nextTone);
         }
     }
 

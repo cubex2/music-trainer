@@ -1,12 +1,14 @@
 package cubex2.musictrainer.data;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import cubex2.musictrainer.Util;
 
 public enum ErrorType
 {
     DURATION(ErrorType::applyDurationError),
-    FREQUENCY(ErrorType::applyFrequencyError),
-    VOLUME(ErrorType::applyVolumeError);
+    FREQUENCY((tone, prev, next) -> applyFrequencyError(tone)),
+    VOLUME((tone, prev, next) -> applyVolumeError(tone));
 
     private static final float MIN_DURATION_ERROR = 0.1f;
     private static final float MAX_DURATION_ERROR = 0.25f;
@@ -22,24 +24,36 @@ public enum ErrorType
         this.errorFunction = errorFunction;
     }
 
-    public void apply(PlayableTone tone)
+    public void apply(@NonNull PlayableTone tone, @Nullable PlayableTone prevTone, @Nullable PlayableTone nextTone)
     {
-        errorFunction.apply(tone);
+        errorFunction.apply(tone, prevTone, nextTone);
     }
 
-    private static void applyDurationError(PlayableTone tone)
+    private static void applyDurationError(@NonNull PlayableTone tone, @Nullable PlayableTone prevTone, @Nullable PlayableTone nextTone)
     {
         float error = Util.randomSign() * Util.randomInRange(MIN_DURATION_ERROR, MAX_DURATION_ERROR);
         tone.setDuration(tone.getDuration() + error);
+
+        if (prevTone != null && nextTone != null)
+        {
+            prevTone.setDuration(prevTone.getDuration() - error / 2F);
+            nextTone.setDuration(nextTone.getDuration() - error / 2F);
+        } else if (prevTone != null)
+        {
+            prevTone.setDuration(prevTone.getDuration() - error);
+        } else if (nextTone != null)
+        {
+            nextTone.setDuration(nextTone.getDuration() - error);
+        }
     }
 
-    private static void applyFrequencyError(PlayableTone tone)
+    private static void applyFrequencyError(@NonNull PlayableTone tone)
     {
         int error = Util.randomSign() * Util.randomInRange(MIN_FREQUENCY_ERROR, MAX_FREQUENCY_ERROR);
         tone.setTone(Tone.forKeyNumber(tone.getTone().getKeyNumber() + error));
     }
 
-    private static void applyVolumeError(PlayableTone tone)
+    private static void applyVolumeError(@NonNull PlayableTone tone)
     {
         float error = Util.randomInRange(MIN_VOLUME_ERROR, MAX_VOLUME_ERROR);
         tone.setVolume(tone.getVolume() - error);
@@ -47,6 +61,6 @@ public enum ErrorType
 
     interface ErrorFunction
     {
-        void apply(PlayableTone tone);
+        void apply(@NonNull PlayableTone tone, @Nullable PlayableTone prevTone, @Nullable PlayableTone nextTone);
     }
 }
