@@ -193,6 +193,14 @@ public class QuizActivity extends AppCompatActivity
         finish();
     }
 
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+
+        player.release();
+    }
+
     void playSound()
     {
         player.play(this);

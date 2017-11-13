@@ -99,6 +99,17 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
         }, delay + 50);
     }
 
+    public void release()
+    {
+        for (int soundID : soundIDs)
+        {
+            soundPool.unload(soundID);
+        }
+
+        soundPool.release();
+        soundPool = null;
+    }
+
     @Override
     public void onLoadComplete(SoundPool soundPool, int sampleId, int status)
     {
