@@ -13,10 +13,12 @@ public class Quiz
 
     private final Set<Integer> errorIndices;
     private final List<ErrorType> activeErrors;
+    private final ToneSequence sequence;
     private PlayableTone[] tones;
 
     public Quiz(ToneSequence sequence, int maxErrors, List<ErrorType> activeErrors)
     {
+        this.sequence = sequence;
         this.activeErrors = activeErrors;
         int numErrors = Util.randomInRange(1, maxErrors);
 
@@ -35,6 +37,11 @@ public class Quiz
         }
 
         applyErrors(errorIndices);
+    }
+
+    public ToneSequence getSequence()
+    {
+        return sequence;
     }
 
     public PlayableTone[] getTones()

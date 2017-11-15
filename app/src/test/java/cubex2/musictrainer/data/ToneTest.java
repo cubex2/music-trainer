@@ -76,4 +76,14 @@ public class ToneTest
         assertEquals("bb7", Tone.fileName(86));
         assertEquals("b2", Tone.fileName(27));
     }
+
+    @Test
+    public void noteLine() throws Exception
+    {
+        assertEquals(0, Tone.toneLine(1));
+        assertEquals(1, Tone.toneLine(2));
+        assertEquals(1, Tone.toneLine(3));
+        assertEquals(23, Tone.toneLine(40));
+        assertEquals(24, Tone.toneLine(41));
+    }
 }

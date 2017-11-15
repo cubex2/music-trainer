@@ -7,6 +7,10 @@ import java.util.Map;
 
 public class Tone
 {
+    public static final int MAX_KEY_NUMBER = 88;
+    public static final int MIN_KEY_NUMBER = 1;
+
+
     private static final int TONES_PER_OCTAVE = 12;
     private static final Map<Integer, Tone> tones = new HashMap<>();
 
@@ -23,6 +27,7 @@ public class Tone
     }
 
     private final int keyNumber;
+    private final int toneLine;
     private final double frequency;
     private final String keyName;
     private final String fileName;
@@ -31,6 +36,7 @@ public class Tone
     private Tone(int keyNumber)
     {
         this.keyNumber = keyNumber;
+        this.toneLine = toneLine(keyNumber);
         this.frequency = pianoFrequency(keyNumber);
         this.keyName = keyName(keyNumber);
         this.fileName = fileName(keyNumber);
@@ -57,6 +63,26 @@ public class Tone
             resourceId = context.getResources().getIdentifier("piano_ff_" + fileName, "raw", context.getPackageName());
 
         return resourceId;
+    }
+
+    public boolean isBlackKey()
+    {
+        return fileName.length() == 2;
+    }
+
+    public boolean isWhiteKey()
+    {
+        return fileName.length() == 1;
+    }
+
+    /**
+     * Gets the absolute note line at which this key will be drawn to. The tone with key number 1 is at line, the tones
+     * with key numbers 2 and 3 are on line 1 and so on. Tones with modifiers are on the same line as the next tone, so
+     * they need the "b" modifier for the returned line.
+     */
+    public int getToneLine()
+    {
+        return toneLine;
     }
 
     static double pianoFrequency(int keyNumber)
@@ -145,6 +171,15 @@ public class Tone
         }
 
         return sb.toString();
+    }
+
+    static int toneLine(int keyNumber)
+    {
+        final int[] values = {0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 6, 6};
+
+        int section = keyNumber / 12;
+        int offset = keyNumber % 12;
+        return values[offset] + section * 7;
     }
 
     static int numberForOctave(int octave)
