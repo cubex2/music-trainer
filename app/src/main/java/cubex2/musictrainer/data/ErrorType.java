@@ -2,13 +2,14 @@ package cubex2.musictrainer.data;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import cubex2.musictrainer.R;
 import cubex2.musictrainer.Util;
 
 public enum ErrorType
 {
-    DURATION(ErrorType::applyDurationError),
-    FREQUENCY((tone, prev, next) -> applyFrequencyError(tone)),
-    VOLUME((tone, prev, next) -> applyVolumeError(tone));
+    DURATION(R.string.error_type_duration, ErrorType::applyDurationError),
+    FREQUENCY(R.string.error_type_frequency, (tone, prev, next) -> applyFrequencyError(tone)),
+    VOLUME(R.string.error_type_volume, (tone, prev, next) -> applyVolumeError(tone));
 
     private static final float MIN_DURATION_ERROR = 0.1f;
     private static final float MAX_DURATION_ERROR = 0.25f;
@@ -18,9 +19,11 @@ public enum ErrorType
     private static final float MAX_VOLUME_ERROR = 0.5f;
 
     private final ErrorFunction errorFunction;
+    public final int displayName;
 
-    ErrorType(ErrorFunction errorFunction)
+    ErrorType(int displayName, ErrorFunction errorFunction)
     {
+        this.displayName = displayName;
         this.errorFunction = errorFunction;
     }
 

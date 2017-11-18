@@ -2,16 +2,14 @@ package cubex2.musictrainer.data;
 
 import cubex2.musictrainer.Util;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Quiz
 {
     private static final float TONE_DURATION = 0.5f;
     private static final float TONE_VOLUME = 1f;
 
-    private final Set<Integer> errorIndices;
+    private final Map<Integer, ErrorType> errorIndices;
     private final List<ErrorType> activeErrors;
     private final ToneSequence sequence;
     private PlayableTone[] tones;
@@ -65,40 +63,44 @@ public class Quiz
 
         for (Integer tone : selectedTones)
         {
-            if (!errorIndices.contains(tone))
+            if (!errorIndices.containsKey(tone))
                 incorrectlySelected.add(tone);
         }
 
-        for (Integer index : errorIndices)
+        for (Integer index : errorIndices.keySet())
         {
             if (!selectedTones.contains(index))
                 incorrectlyNotSelected.add(index);
         }
 
-        return new Report(Util.toSortedArray(incorrectlySelected),
-                          Util.toSortedArray(incorrectlyNotSelected),
-                          Util.toSortedArray(errorIndices));
+        return new Report(incorrectlySelected,
+                          incorrectlyNotSelected,
+                          errorIndices);
     }
 
-    private void applyErrors(Set<Integer> errorIndices)
+    private void applyErrors(Map<Integer, ErrorType> errorIndices)
     {
-        for (Integer index : errorIndices)
+        for (Map.Entry<Integer, ErrorType> entry : errorIndices.entrySet())
         {
+            int index = entry.getKey();
+            ErrorType error = entry.getValue();
+
             PlayableTone tone = tones[index];
             PlayableTone prevTone = index == 0 ? null : tones[index - 1];
             PlayableTone nextTone = index == tones.length - 1 ? null : tones[index + 1];
-            ErrorType error = Util.randomElement(activeErrors);
             error.apply(tone, prevTone, nextTone);
         }
     }
 
-    private Set<Integer> computeErrorIndices(int num, int minIndex, int maxIndex)
+    private Map<Integer, ErrorType> computeErrorIndices(int num, int minIndex, int maxIndex)
     {
-        Set<Integer> indices = new HashSet<>();
+        Map<Integer, ErrorType> indices = new HashMap<>();
 
         while (indices.size() < num)
         {
-            indices.add(Util.randomInRange(minIndex, maxIndex));
+            int index = Util.randomInRange(minIndex, maxIndex);
+            ErrorType error = Util.randomElement(activeErrors);
+            indices.put(index, error);
         }
 
         return indices;
@@ -106,20 +108,19 @@ public class Quiz
 
     public static class Report
     {
-        public final int[] incorrectlySelected;
-        public final int[] incorrectlyNotSelected;
-        public final int[] allErrors;
+        public final Map<Integer, ErrorType> allErrors;
+        public final Set<Integer> errors = new HashSet<>();
 
-        public Report(int[] incorrectlySelected, int[] incorrectlyNotSelected, int[] allErrors)
+        public Report(Set<Integer> incorrectlySelected, Set<Integer> incorrectlyNotSelected, Map<Integer, ErrorType> errors)
         {
-            this.incorrectlySelected = incorrectlySelected;
-            this.incorrectlyNotSelected = incorrectlyNotSelected;
-            this.allErrors = allErrors;
+            this.errors.addAll(incorrectlySelected);
+            this.errors.addAll(incorrectlyNotSelected);
+            this.allErrors = Collections.unmodifiableMap(errors);
         }
 
         public boolean hasMistakes()
         {
-            return incorrectlySelected.length > 0 || incorrectlyNotSelected.length > 0;
+            return errors.size() > 0;
         }
     }
 }
