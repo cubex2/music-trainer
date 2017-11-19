@@ -13,12 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import cubex2.musictrainer.config.Settings;
-import cubex2.musictrainer.data.*;
+import cubex2.musictrainer.data.Difficulty;
+import cubex2.musictrainer.data.ErrorType;
+import cubex2.musictrainer.data.Quiz;
 import cubex2.musictrainer.stats.StatContract;
 import cubex2.musictrainer.stats.StatDbHelper;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class QuizActivity extends AppCompatActivity
@@ -43,7 +44,7 @@ public class QuizActivity extends AppCompatActivity
         setContentView(R.layout.activity_quiz);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        quiz = createQuiz();
+        quiz = createQuiz(Difficulty.fromSettings(this));
         tonesChecked = new boolean[quiz.getNumTones()];
 
         player = new SoundPlayer(this, quiz.getTones());
@@ -70,28 +71,12 @@ public class QuizActivity extends AppCompatActivity
         listView.setAdapter(new ListAdapter());
     }
 
-    private Quiz createQuiz()
+    private Quiz createQuiz(Difficulty difficulty)
     {
-        ToneSequence sequence;
-        int maxErrors = Settings.getMaxErrors(this);
-        int numTones = Settings.getNumTones(this);
-        boolean scales = Settings.useScales(this);
-        boolean arpeggios = Settings.useArpeggios(this);
-        List<ErrorType> activeErrors = Settings.getActiveErrors(this);
-
         int minTone = Settings.getMinimumStartToneKey(this);
         int maxTone = Settings.getMaximumStartToneKey(this);
-        int startTone = Util.randomInRange(minTone, maxTone);
 
-        if (scales && (!arpeggios || Util.randomBoolean()))
-        {
-            sequence = Scale.major(Tone.forKeyNumber(startTone), numTones);
-        } else
-        {
-            sequence = Arpeggio.major(Tone.forKeyNumber(startTone), numTones);
-        }
-
-        return new Quiz(sequence, maxErrors, activeErrors);
+        return Quiz.fromDifficulty(difficulty, minTone, maxTone);
     }
 
     private void submit()

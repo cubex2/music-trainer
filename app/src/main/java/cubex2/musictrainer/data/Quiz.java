@@ -106,6 +106,28 @@ public class Quiz
         return indices;
     }
 
+    public static Quiz fromDifficulty(Difficulty difficulty, int minTone, int maxTone)
+    {
+        ToneSequence sequence;
+        int maxErrors = difficulty.getMaxErrors();
+        int numTones = difficulty.getNumTones();
+        boolean scales = difficulty.useScales();
+        boolean arpeggios = difficulty.useArpeggios();
+        List<ErrorType> activeErrors = difficulty.getErrorTypes();
+
+        int startTone = Util.randomInRange(minTone, maxTone);
+
+        if (scales && (!arpeggios || Util.randomBoolean()))
+        {
+            sequence = Scale.major(Tone.forKeyNumber(startTone), numTones);
+        } else
+        {
+            sequence = Arpeggio.major(Tone.forKeyNumber(startTone), numTones);
+        }
+
+        return new Quiz(sequence, maxErrors, activeErrors);
+    }
+
     public static class Report
     {
         public final Map<Integer, ErrorType> allErrors;
