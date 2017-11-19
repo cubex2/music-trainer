@@ -119,10 +119,10 @@ public class Quiz
 
         if (scales && (!arpeggios || Util.randomBoolean()))
         {
-            sequence = Scale.major(Tone.forKeyNumber(startTone), numTones);
+            sequence = Scale.random(Tone.forKeyNumber(startTone), numTones);
         } else
         {
-            sequence = Arpeggio.major(Tone.forKeyNumber(startTone), numTones);
+            sequence = Arpeggio.random(Tone.forKeyNumber(startTone), numTones);
         }
 
         return new Quiz(sequence, maxErrors, activeErrors);

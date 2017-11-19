@@ -1,5 +1,7 @@
 package cubex2.musictrainer.data;
 
+import cubex2.musictrainer.Util;
+
 public class Scale extends ToneSequence
 {
     private static final int[] MAJOR_OFFSETS = {2, 2, 1, 2, 2, 2, 1};
@@ -18,5 +20,13 @@ public class Scale extends ToneSequence
     public static ToneSequence minor(Tone startTone, int numTones)
     {
         return fromOffsets(startTone, numTones, MINOR_OFFSETS);
+    }
+
+    public static ToneSequence random(Tone startTone, int numTones)
+    {
+        if (Util.randomBoolean())
+            return major(startTone, numTones);
+        else
+            return minor(startTone, numTones);
     }
 }
