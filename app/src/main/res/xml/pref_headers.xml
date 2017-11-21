@@ -3,8 +3,8 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-            android:fragment="cubex2.musictrainer.config.SettingsActivity$GeneralPreferenceFragment"
-            android:title="@string/pref_header_general"
+            android:fragment="cubex2.musictrainer.config.SettingsActivity$DifficultyPreferenceFragment"
+            android:title="@string/pref_header_difficulty"
             android:icon="@drawable/ic_info_black_24dp"/>
 
 </preference-headers>

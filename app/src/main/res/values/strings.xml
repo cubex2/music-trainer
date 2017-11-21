@@ -24,7 +24,7 @@
     <string name="multi_select_invalid_selection">Invalid selection!</string>
 
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
+    <string name="pref_header_difficulty">Difficulty</string>
 
     <string name="pref_max_errors_key">max_errors</string>
     <string name="pref_max_errors">Max Errors</string>
