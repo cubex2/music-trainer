@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.*;
 import cubex2.musictrainer.config.Settings;
 import cubex2.musictrainer.data.Difficulty;
+import cubex2.musictrainer.data.DifficultyFromSettings;
 import cubex2.musictrainer.data.ErrorType;
 import cubex2.musictrainer.data.Quiz;
 import cubex2.musictrainer.stats.StatContract;
@@ -44,7 +45,7 @@ public class QuizActivity extends AppCompatActivity
         setContentView(R.layout.activity_quiz);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        quiz = createQuiz(Difficulty.fromSettings(this));
+        quiz = createQuiz(new DifficultyFromSettings(this));
         tonesChecked = new boolean[quiz.getNumTones()];
 
         player = new SoundPlayer(this, quiz.getTones());
