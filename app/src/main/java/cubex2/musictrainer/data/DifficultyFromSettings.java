@@ -43,4 +43,10 @@ public class DifficultyFromSettings implements Difficulty
     {
         return Settings.getActiveErrors(context);
     }
+
+    @Override
+    public List<Float> getDurationErrors()
+    {
+        return Settings.getDurationErrors(context);
+    }
 }

@@ -60,6 +60,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                 MultiSelectListPreference listPreference = (MultiSelectListPreference) preference;
                 Set<String> setValue = (Set<String>) value;
 
+                removeInvalidValues(setValue, listPreference.getEntryValues());
+
                 if (setValue.isEmpty())
                 {
                     Context context = preference.getContext();
@@ -90,6 +92,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             return true;
         }
     };
+
+    private static void removeInvalidValues(Set<String> values, CharSequence[] validValues)
+    {
+        outer:
+        for (Iterator<String> iterator = values.iterator(); iterator.hasNext(); )
+        {
+            String value = iterator.next();
+            for (CharSequence validValue : validValues)
+            {
+                if (validValue.equals(value))
+                    continue outer;
+            }
+
+            iterator.remove();
+        }
+    }
 
     /**
      * Helper method to determine if the device has an extra-large screen. For
@@ -206,6 +224,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sequence_types_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_error_types_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_num_tones_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_duration_error_key)));
         }
 
         @Override

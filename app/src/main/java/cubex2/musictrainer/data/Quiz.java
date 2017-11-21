@@ -12,12 +12,14 @@ public class Quiz
     private final Map<Integer, ErrorType> errorIndices;
     private final List<ErrorType> activeErrors;
     private final ToneSequence sequence;
+    private final List<Float> durationErrors;
     private PlayableTone[] tones;
 
-    public Quiz(ToneSequence sequence, int maxErrors, List<ErrorType> activeErrors)
+    public Quiz(ToneSequence sequence, int maxErrors, List<ErrorType> activeErrors, List<Float> durationErrors)
     {
         this.sequence = sequence;
         this.activeErrors = activeErrors;
+        this.durationErrors = durationErrors;
         int numErrors = Util.randomInRange(1, maxErrors);
 
         errorIndices = computeErrorIndices(numErrors, 0, sequence.getTones().size() - 1);
@@ -88,7 +90,7 @@ public class Quiz
             PlayableTone tone = tones[index];
             PlayableTone prevTone = index == 0 ? null : tones[index - 1];
             PlayableTone nextTone = index == tones.length - 1 ? null : tones[index + 1];
-            error.apply(tone, prevTone, nextTone);
+            error.apply(durationErrors, tone, prevTone, nextTone);
         }
     }
 
@@ -114,6 +116,7 @@ public class Quiz
         boolean scales = difficulty.useScales();
         boolean arpeggios = difficulty.useArpeggios();
         List<ErrorType> activeErrors = difficulty.getErrorTypes();
+        List<Float> durationErrors = difficulty.getDurationErrors();
 
         int startTone = Util.randomInRange(minTone, maxTone);
 
@@ -125,7 +128,7 @@ public class Quiz
             sequence = Arpeggio.random(Tone.forKeyNumber(startTone), numTones);
         }
 
-        return new Quiz(sequence, maxErrors, activeErrors);
+        return new Quiz(sequence, maxErrors, activeErrors, durationErrors);
     }
 
     public static class Report

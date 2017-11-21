@@ -63,6 +63,21 @@ public class Settings
         return list;
     }
 
+    public static List<Float> getDurationErrors(Context context)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.pref_duration_error_key);
+        Set<String> values = preferences.getStringSet(key, Collections.emptySet());
+
+        List<Float> durations = new ArrayList<>();
+        for (String value : values)
+        {
+            durations.add(Float.parseFloat(value));
+        }
+
+        return durations;
+    }
+
     public static int getMinimumStartToneKey(Context context)
     {
         return 30;

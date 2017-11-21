@@ -34,4 +34,11 @@
                                android:entryValues="@array/pref_error_types_values">
     </MultiSelectListPreference>
 
+    <MultiSelectListPreference android:key="@string/pref_duration_error_key"
+                               android:title="@string/pref_duration_error"
+                               android:defaultValue="@array/pref_duration_error_values"
+                               android:entries="@array/pref_duration_error_entries"
+                               android:entryValues="@array/pref_duration_error_values">
+    </MultiSelectListPreference>
+
 </PreferenceScreen>

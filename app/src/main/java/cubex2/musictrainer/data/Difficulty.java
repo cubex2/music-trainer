@@ -13,4 +13,6 @@ public interface Difficulty
     boolean useArpeggios();
 
     List<ErrorType> getErrorTypes();
+
+    List<Float> getDurationErrors();
 }
