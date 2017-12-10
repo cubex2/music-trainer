@@ -7,7 +7,7 @@ import java.util.List;
 
 public class DifficultyFromSettings implements Difficulty
 {
-    private final Context context;
+    protected final Context context;
 
     public DifficultyFromSettings(Context context)
     {
@@ -48,5 +48,17 @@ public class DifficultyFromSettings implements Difficulty
     public List<Float> getDurationErrors()
     {
         return Settings.getDurationErrors(context);
+    }
+
+    @Override
+    public List<Float> getVolumeErrors()
+    {
+        return Settings.getVolumeErrors(context);
+    }
+
+    @Override
+    public List<Integer> getFrequencyErrors()
+    {
+        return Settings.getFrequencyErrors(context);
     }
 }

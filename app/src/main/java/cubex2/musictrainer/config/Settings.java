@@ -69,6 +69,14 @@ public class Settings
         return list;
     }
 
+    public static boolean useDynamicDifficulty(Context context)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.pref_use_dynamic_difficulty_key);
+
+        return preferences.getBoolean(key, true);
+    }
+
     public static List<Float> getDurationErrors(Context context)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -93,6 +101,26 @@ public class Settings
         return durations;
     }
 
+    public static List<Integer> getFrequencyErrors(Context context)
+    {
+        List<Integer> errors = new ArrayList<>();
+        errors.add(1);
+        errors.add(2);
+        return errors;
+    }
+
+    public static List<Float> getVolumeErrors(Context context)
+    {
+        List<Float> errors = new ArrayList<>();
+        errors.add(0.25f);
+        errors.add(0.30f);
+        errors.add(0.35f);
+        errors.add(0.40f);
+        errors.add(0.45f);
+        errors.add(0.50f);
+        return errors;
+    }
+
     public static int getMinimumStartToneKey(Context context)
     {
         return 30;
@@ -101,5 +129,44 @@ public class Settings
     public static int getMaximumStartToneKey(Context context)
     {
         return 50;
+    }
+
+    public static float getDynamicDurationError(Context context)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.dynamic_duration_error_key);
+
+        return preferences.getFloat(key, 0.25f);
+    }
+
+    public static float getDynamicVolumeError(Context context)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.dynamic_volume_error_key);
+
+        return preferences.getFloat(key, 0.5f);
+    }
+
+    public static int getDynamicFrequencyError(Context context)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.dynamic_frequency_error_key);
+
+        return preferences.getInt(key, 1);
+    }
+
+    public static void setDynamicErrorValues(Context context, float duration, float volume, int frequency)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        String durationKey = context.getString(R.string.dynamic_duration_error_key);
+        String volumeKey = context.getString(R.string.dynamic_volume_error_key);
+        String frequencyKey = context.getString(R.string.dynamic_frequency_error_key);
+
+        editor.putFloat(durationKey, duration);
+        editor.putFloat(volumeKey, volume);
+        editor.putInt(frequencyKey, frequency);
+
+        editor.commit();
     }
 }

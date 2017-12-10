@@ -12,15 +12,15 @@ public class Quiz
     private final Map<Integer, ErrorType> errorIndices;
     private final List<ErrorType> activeErrors;
     private final ToneSequence sequence;
-    private final List<Float> durationErrors;
+    private final Difficulty difficulty;
     private PlayableTone[] tones;
 
-    public Quiz(ToneSequence sequence, int maxErrors, List<ErrorType> activeErrors, List<Float> durationErrors)
+    public Quiz(ToneSequence sequence, Difficulty difficulty)
     {
         this.sequence = sequence;
-        this.activeErrors = activeErrors;
-        this.durationErrors = durationErrors;
-        int numErrors = Util.randomInRange(1, maxErrors);
+        this.difficulty = difficulty;
+        this.activeErrors = difficulty.getErrorTypes();
+        int numErrors = Util.randomInRange(1, difficulty.getMaxErrors());
 
         errorIndices = computeErrorIndices(numErrors, 0, sequence.getTones().size() - 1);
 
@@ -90,7 +90,7 @@ public class Quiz
             PlayableTone tone = tones[index];
             PlayableTone prevTone = index == 0 ? null : tones[index - 1];
             PlayableTone nextTone = index == tones.length - 1 ? null : tones[index + 1];
-            error.apply(durationErrors, tone, prevTone, nextTone);
+            error.apply(difficulty, tone, prevTone, nextTone);
         }
     }
 
@@ -111,12 +111,9 @@ public class Quiz
     public static Quiz fromDifficulty(Difficulty difficulty, int minTone, int maxTone)
     {
         ToneSequence sequence;
-        int maxErrors = difficulty.getMaxErrors();
         int numTones = difficulty.getNumTones();
         boolean scales = difficulty.useScales();
         boolean arpeggios = difficulty.useArpeggios();
-        List<ErrorType> activeErrors = difficulty.getErrorTypes();
-        List<Float> durationErrors = difficulty.getDurationErrors();
 
         int startTone = Util.randomInRange(minTone, maxTone);
 
@@ -128,7 +125,7 @@ public class Quiz
             sequence = Arpeggio.random(Tone.forKeyNumber(startTone), numTones);
         }
 
-        return new Quiz(sequence, maxErrors, activeErrors, durationErrors);
+        return new Quiz(sequence, difficulty);
     }
 
     public static class Report

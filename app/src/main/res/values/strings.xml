@@ -93,5 +93,12 @@
         <item>volume</item>
     </string-array>
 
+    <string name="pref_use_dynamic_difficulty_key">dynamic_difficulty</string>
+    <string name="pref_use_dynamic_difficulty">Dynamic Difficulty</string>
+
+    <string name="dynamic_volume_error_key">dynamic_volume</string>
+    <string name="dynamic_duration_error_key">dynamic_duration</string>
+    <string name="dynamic_frequency_error_key">dynamic_frequency</string>
+
 
 </resources>

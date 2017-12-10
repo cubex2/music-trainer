@@ -31,11 +31,7 @@ import java.util.*;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity
 {
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener()
+    private static class ChangeListener implements Preference.OnPreferenceChangeListener
     {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value)
@@ -83,7 +79,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
                 preference.setSummary(Util.join(displayValues, ", "));
 
-            } else
+            } else if (!(preference instanceof CheckBoxPreference))
             {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -91,7 +87,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             }
             return true;
         }
-    };
+    }
 
     private static void removeInvalidValues(Set<String> values, CharSequence[] validValues)
     {
@@ -119,26 +115,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                 & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
     }
 
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
-    private static void bindPreferenceSummaryToValue(Preference preference)
+    private static void initPreference(Preference.OnPreferenceChangeListener listener, Preference preference)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
 
         // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+        preference.setOnPreferenceChangeListener(listener);
 
         Object value;
         if (preference instanceof MultiSelectListPreference)
         {
             value = preferences.getStringSet(preference.getKey(), new HashSet<>());
+        } else if (preference instanceof CheckBoxPreference)
+        {
+            value = preferences.getBoolean(preference.getKey(), true);
         } else
         {
             value = preferences.getString(preference.getKey(), "");
@@ -146,7 +136,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
         // Trigger the listener immediately with the preference's
         // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, value);
+        listener.onPreferenceChange(preference, value);
     }
 
     @Override
@@ -216,15 +206,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             addPreferencesFromResource(R.xml.pref_difficulty);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_errors_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sequence_types_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_error_types_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_num_tones_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_duration_error_key)));
+            Preference.OnPreferenceChangeListener listener = new ChangeListener();
+
+            initPreference(listener, findPreference(getString(R.string.pref_max_errors_key)));
+            initPreference(listener, findPreference(getString(R.string.pref_sequence_types_key)));
+            initPreference(listener, findPreference(getString(R.string.pref_error_types_key)));
+            initPreference(listener, findPreference(getString(R.string.pref_num_tones_key)));
+            initPreference(listener, findPreference(getString(R.string.pref_duration_error_key)));
+            initPreference(listener, findPreference(getString(R.string.pref_use_dynamic_difficulty_key)));
         }
 
         @Override
