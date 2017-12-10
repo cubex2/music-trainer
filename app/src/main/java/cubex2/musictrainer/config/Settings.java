@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import cubex2.musictrainer.R;
+import cubex2.musictrainer.Util;
 import cubex2.musictrainer.data.ErrorType;
 
 import java.util.ArrayList;
@@ -60,6 +61,11 @@ public class Settings
         if (values.contains("volume"))
             list.add(ErrorType.VOLUME);
 
+        if (list.isEmpty())
+        {
+            Collections.addAll(list, ErrorType.values());
+        }
+
         return list;
     }
 
@@ -73,6 +79,15 @@ public class Settings
         for (String value : values)
         {
             durations.add(Float.parseFloat(value));
+        }
+
+        if (durations.isEmpty())
+        {
+            float[] defaults = Util.getFloatArray(context, R.array.pref_duration_error_values);
+            for (float duration : defaults)
+            {
+                durations.add(duration);
+            }
         }
 
         return durations;

@@ -1,5 +1,6 @@
 package cubex2.musictrainer;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import java.io.Closeable;
@@ -81,6 +82,18 @@ public class Util
 
             }
         }
+    }
+
+    public static float[] getFloatArray(Context context, int id)
+    {
+        String[] strings = context.getResources().getStringArray(id);
+
+        float[] floats = new float[strings.length];
+        for (int i = 0; i < strings.length; i++)
+        {
+            floats[i] = Float.parseFloat(strings[i]);
+        }
+        return floats;
     }
 
 }
