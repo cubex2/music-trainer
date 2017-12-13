@@ -73,8 +73,8 @@ public class QuizActivity extends AppCompatActivity
 
     private Quiz createQuiz()
     {
-        Difficulty difficulty = Settings.useDynamicDifficulty(this) ? new DifficultyFromSettings(this)
-                                                                    : new DifficultyDynamic(this);
+        Difficulty difficulty = Settings.useDynamicDifficulty(this) ? new DifficultyDynamic(this)
+                                                                    : new DifficultyFromSettings(this);
 
         int minTone = Settings.getMinimumStartToneKey(this);
         int maxTone = Settings.getMaximumStartToneKey(this);
