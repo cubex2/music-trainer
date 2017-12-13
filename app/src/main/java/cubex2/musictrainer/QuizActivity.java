@@ -16,8 +16,10 @@ import cubex2.musictrainer.config.Settings;
 import cubex2.musictrainer.data.*;
 import cubex2.musictrainer.stats.StatContract;
 import cubex2.musictrainer.stats.StatDbHelper;
+import cubex2.musictrainer.stats.StatEntry;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class QuizActivity extends AppCompatActivity
@@ -98,24 +100,60 @@ public class QuizActivity extends AppCompatActivity
         listView.invalidateViews();
     }
 
-    private void updateStats(Quiz.Report report)
+    private void updateStats(StatDbHelper helper, Quiz.Report report)
     {
-        StatDbHelper helper = new StatDbHelper(this);
-
-        SQLiteDatabase db = helper.getWritableDatabase();
-
         ContentValues values = new ContentValues();
         values.put(StatContract.StatEntry.COLUMN_NAME_TIMESTAMP, System.currentTimeMillis());
         values.put(StatContract.StatEntry.COLUMN_NAME_CORRECT, !report.hasMistakes());
 
-        db.insert(StatContract.StatEntry.TABEL_NAME, null, values);
+        values.put(StatContract.StatEntry.COLUMN_NAME_DURATION_ERROR, quiz.difficulty.getDurationError());
+        values.put(StatContract.StatEntry.COLUMN_NAME_VOLUME_ERROR, quiz.difficulty.getVolumeError());
+        values.put(StatContract.StatEntry.COLUMN_NAME_FREQUENCY_ERROR, quiz.difficulty.getFrequencyError());
 
-        helper.close();
+        values.put(StatContract.StatEntry.COLUMN_NAME_HAS_DURATION_ERROR, report.hasError(ErrorType.DURATION));
+        values.put(StatContract.StatEntry.COLUMN_NAME_HAS_VOLUME_ERROR, report.hasError(ErrorType.VOLUME));
+        values.put(StatContract.StatEntry.COLUMN_NAME_HAS_FREQUENCY_ERROR, report.hasError(ErrorType.FREQUENCY));
+
+        values.put(StatContract.StatEntry.COLUMN_NAME_HAS_DURATION_MISTAKE, report.hasMistake(ErrorType.DURATION));
+        values.put(StatContract.StatEntry.COLUMN_NAME_HAS_VOLUME_MISTAKE, report.hasMistake(ErrorType.VOLUME));
+        values.put(StatContract.StatEntry.COLUMN_NAME_HAS_FREQUENCY_MISTAKE, report.hasMistake(ErrorType.FREQUENCY));
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.insert(StatContract.StatEntry.TABLE_NAME, null, values);
+    }
+
+    private void updateDynamicDifficulty(StatDbHelper helper)
+    {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        List<StatEntry> entries;
+
+        float currentDuration = Settings.getDynamicDurationError(this);
+        entries = entriesForErrorType(helper, db, ErrorType.DURATION, currentDuration);
+        float newDuration = DynamicDifficultyHelper.computeNewDurationError(currentDuration, entries);
+
+        float currentVolume = Settings.getDynamicVolumeError(this);
+        entries = entriesForErrorType(helper, db, ErrorType.VOLUME, currentVolume);
+        float newVolume = DynamicDifficultyHelper.computeNewVolumeError(currentVolume, entries);
+
+        int currentFrequency = Settings.getDynamicFrequencyError(this);
+        entries = entriesForErrorType(helper, db, ErrorType.FREQUENCY, currentFrequency);
+        int newFrequency = DynamicDifficultyHelper.computeNewFrequencyError(currentFrequency, entries);
+
+        Settings.setDynamicErrorValues(this, newDuration, newVolume, newFrequency);
+    }
+
+    private List<StatEntry> entriesForErrorType(StatDbHelper helper, SQLiteDatabase db, ErrorType errorType, float current)
+    {
+        return helper.readEntriesWithError(db, errorType, current, 20);
     }
 
     private void nextQuiz(Quiz.Report report)
     {
-        updateStats(report);
+        StatDbHelper helper = new StatDbHelper(this);
+        updateStats(helper, report);
+        updateDynamicDifficulty(helper);
+        helper.close();
 
         Intent intent = new Intent(this, QuizActivity.class);
         startActivity(intent);

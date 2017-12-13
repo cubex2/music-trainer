@@ -3,9 +3,6 @@ package cubex2.musictrainer.data;
 import android.content.Context;
 import cubex2.musictrainer.config.Settings;
 
-import java.util.Collections;
-import java.util.List;
-
 public class DifficultyDynamic extends DifficultyFromSettings
 {
     public DifficultyDynamic(Context context)
@@ -14,20 +11,20 @@ public class DifficultyDynamic extends DifficultyFromSettings
     }
 
     @Override
-    public List<Float> getDurationErrors()
+    public float getDurationError()
     {
-        return Collections.singletonList(Settings.getDynamicDurationError(context));
+        return Settings.getDynamicDurationError(context);
     }
 
     @Override
-    public List<Float> getVolumeErrors()
+    public float getVolumeError()
     {
-        return Collections.singletonList(Settings.getDynamicVolumeError(context));
+        return Settings.getDynamicVolumeError(context);
     }
 
     @Override
-    public List<Integer> getFrequencyErrors()
+    public int getFrequencyError()
     {
-        return Collections.singletonList(Settings.getDynamicFrequencyError(context));
+        return Settings.getDynamicFrequencyError(context);
     }
 }

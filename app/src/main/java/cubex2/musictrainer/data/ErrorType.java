@@ -27,7 +27,7 @@ public enum ErrorType
 
     private static void applyDurationError(@NonNull Difficulty difficulty, @NonNull PlayableTone tone, @Nullable PlayableTone prevTone, @Nullable PlayableTone nextTone)
     {
-        float error = Util.randomSign() * Util.randomElement(difficulty.getDurationErrors());
+        float error = Util.randomSign() * difficulty.getDurationError();
         tone.setDuration(tone.getDuration() + error);
 
         if (prevTone != null && nextTone != null)
@@ -45,13 +45,13 @@ public enum ErrorType
 
     private static void applyFrequencyError(@NonNull Difficulty difficulty, @NonNull PlayableTone tone)
     {
-        int error = Util.randomElement(difficulty.getFrequencyErrors());
+        int error = difficulty.getFrequencyError();
         tone.setTone(Tone.forKeyNumber(tone.getTone().getKeyNumber() + error));
     }
 
     private static void applyVolumeError(@NonNull Difficulty difficulty, @NonNull PlayableTone tone)
     {
-        float error = Util.randomElement(difficulty.getVolumeErrors());
+        float error = difficulty.getVolumeError();
         tone.setVolume(tone.getVolume() - error);
     }
 

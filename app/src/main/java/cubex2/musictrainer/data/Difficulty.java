@@ -14,9 +14,9 @@ public interface Difficulty
 
     List<ErrorType> getErrorTypes();
 
-    List<Float> getDurationErrors();
+    float getDurationError();
 
-    List<Float> getVolumeErrors();
+    float getVolumeError();
 
-    List<Integer> getFrequencyErrors();
+    int getFrequencyError();
 }

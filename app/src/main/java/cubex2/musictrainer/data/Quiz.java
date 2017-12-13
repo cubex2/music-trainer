@@ -9,10 +9,10 @@ public class Quiz
     private static final float TONE_DURATION = 0.5f;
     private static final float TONE_VOLUME = 1f;
 
+    public final Difficulty difficulty;
     private final Map<Integer, ErrorType> errorIndices;
     private final List<ErrorType> activeErrors;
     private final ToneSequence sequence;
-    private final Difficulty difficulty;
     private PlayableTone[] tones;
 
     public Quiz(ToneSequence sequence, Difficulty difficulty)
@@ -143,6 +143,28 @@ public class Quiz
         public boolean hasMistakes()
         {
             return errors.size() > 0;
+        }
+
+        public boolean hasMistake(ErrorType errorType)
+        {
+            for (Integer index : errors)
+            {
+                if (allErrors.containsKey(index) && allErrors.get(index) == errorType)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public boolean hasError(ErrorType errorType)
+        {
+            for (ErrorType type : allErrors.values())
+            {
+                if (type == errorType)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

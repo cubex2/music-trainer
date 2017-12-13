@@ -2,7 +2,6 @@ package cubex2.musictrainer;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,17 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import cubex2.musictrainer.config.Settings;
 import cubex2.musictrainer.stats.StatContract;
 import cubex2.musictrainer.stats.StatDbHelper;
 import cubex2.musictrainer.stats.StatEntry;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class StatsActivity extends AppCompatActivity implements DialogInterface.OnClickListener
 {
     private TextView tvStatCount;
     private TextView tvCorrectCount;
+    private TextView tvDuration;
     private Button btnReset;
     private StatDbHelper dbHelper;
 
@@ -39,6 +39,9 @@ public class StatsActivity extends AppCompatActivity implements DialogInterface.
 
         tvCorrectCount = (TextView) findViewById(R.id.correct_tv);
         tvCorrectCount.setText(getString(R.string.correct_count, loadingString));
+
+        tvDuration = (TextView) findViewById(R.id.duration_tv);
+        tvDuration.setText(getString(R.string.correct_count, loadingString));
 
         btnReset = (Button) findViewById(R.id.reset_button);
 
@@ -80,7 +83,7 @@ public class StatsActivity extends AppCompatActivity implements DialogInterface.
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-            db.delete(StatContract.StatEntry.TABEL_NAME,
+            db.delete(StatContract.StatEntry.TABLE_NAME,
                       null,
                       null);
 
@@ -105,41 +108,7 @@ public class StatsActivity extends AppCompatActivity implements DialogInterface.
         {
             SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-            String[] projection = {
-                    StatContract.StatEntry.COLUMN_NAME_TIMESTAMP,
-                    StatContract.StatEntry.COLUMN_NAME_CORRECT
-            };
-
-            String sortOrder = StatContract.StatEntry.COLUMN_NAME_TIMESTAMP + " DESC";
-
-            Cursor cursor = db.query(
-                    StatContract.StatEntry.TABEL_NAME,
-                    projection,
-                    null,
-                    null,
-                    null,
-                    null,
-                    sortOrder);
-
-            List<StatEntry> entries = new LinkedList<>();
-            while (cursor.moveToNext())
-            {
-                entries.add(readEntry(cursor));
-            }
-
-            cursor.close();
-
-            db.close();
-
-            return entries;
-        }
-
-        private StatEntry readEntry(Cursor cursor)
-        {
-            long timeStamp = cursor.getLong(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_TIMESTAMP));
-            boolean wasCorrect = cursor.getInt(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_CORRECT)) == 1;
-
-            return new StatEntry(timeStamp, wasCorrect);
+            return dbHelper.readEntries(db, Integer.MAX_VALUE);
         }
 
         @Override
@@ -152,6 +121,7 @@ public class StatsActivity extends AppCompatActivity implements DialogInterface.
 
             tvStatCount.setText(getString(R.string.stat_count, String.valueOf(finished)));
             tvCorrectCount.setText(getString(R.string.correct_count, correct + " (" + percentCorrect + "%)"));
+            tvDuration.setText(getString(R.string.duration_diff, String.format(getResources().getConfiguration().locale, "%.3f", Settings.getDynamicDurationError(StatsActivity.this))));
 
             btnReset.setEnabled(true);
         }

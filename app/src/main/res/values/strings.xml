@@ -18,6 +18,7 @@
     <string name="stat_count">Finished: %1$s</string>
     <string name="button_stats">Statistics</string>
     <string name="correct_count">Correct: %1$s</string>
+    <string name="duration_diff">Duration: %1$s</string>
     <string name="message_reset_stats">Do you really want to reset the statistics?</string>
 
     <!-- Strings related to Settings -->
