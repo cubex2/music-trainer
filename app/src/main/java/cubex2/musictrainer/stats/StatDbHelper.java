@@ -33,11 +33,11 @@ public class StatDbHelper extends SQLiteOpenHelper
     private static final String SQL_DELETE_STATS = "DROP TABLE IF EXISTS " + StatContract.StatEntry.TABLE_NAME;
 
     private static final String WHERE_ERROR_TYPE_AND_ERROR_AND_TIME = StatContract.StatEntry.COLUMN_NAME_TIMESTAMP + ">=%1$d AND " +
-                                                                      "%2$s=true AND %3$s > %4$.3f AND %3$s < %5$.3f";
+                                                                      "%2$s=1 AND %3$s > %4$.3f AND %3$s < %5$.3f";
 
-    private static final String WHERE_ERROR_TYPE_AND_NOT_ERROR = "%1$s=true AND (%2$s < %3$.3f AND %2$s > %4$.3f)";
+    private static final String WHERE_ERROR_TYPE_AND_NOT_ERROR = "%1$s=1 AND (%2$s < %3$.3f AND %2$s > %4$.3f)";
 
-    private static final String WHERE_ERROR_TYPE = "%1$s=true";
+    private static final String WHERE_ERROR_TYPE = "%1$s=1";
 
     public StatDbHelper(Context context)
     {
@@ -167,8 +167,6 @@ public class StatDbHelper extends SQLiteOpenHelper
         }
 
         cursor.close();
-
-        db.close();
 
         return entries;
     }
