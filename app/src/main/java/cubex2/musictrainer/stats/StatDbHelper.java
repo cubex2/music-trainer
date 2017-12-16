@@ -63,11 +63,6 @@ public class StatDbHelper extends SQLiteOpenHelper
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public List<StatEntry> readEntries(SQLiteDatabase db, int maxEntries)
-    {
-        return readEntries(db, null, null, maxEntries);
-    }
-
     /**
      * Read the most recent entries with the given errorType and error. Any entries that are older than an entry with
      * the same errorType but different error are not returned.
@@ -148,7 +143,12 @@ public class StatDbHelper extends SQLiteOpenHelper
 
     public List<StatEntry> readEntries(SQLiteDatabase db, String selection, String[] selectionArgs, int maxEntries)
     {
-        String sortOrder = StatContract.StatEntry.COLUMN_NAME_TIMESTAMP + " DESC";
+        return readEntries(db, selection, selectionArgs, maxEntries, "DESC");
+    }
+
+    public List<StatEntry> readEntries(SQLiteDatabase db, String selection, String[] selectionArgs, int maxEntries, String order)
+    {
+        String sortOrder = StatContract.StatEntry.COLUMN_NAME_TIMESTAMP + " " + order;
 
         Cursor cursor = db.query(
                 StatContract.StatEntry.TABLE_NAME,

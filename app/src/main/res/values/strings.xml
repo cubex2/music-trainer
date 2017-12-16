@@ -18,8 +18,9 @@
     <string name="stat_count">Finished: %1$s</string>
     <string name="button_stats">Statistics</string>
     <string name="correct_count">Correct: %1$s</string>
-    <string name="duration_diff">Duration: %1$s</string>
     <string name="message_reset_stats">Do you really want to reset the statistics?</string>
+    <string name="legend_duration">Duration</string>
+    <string name="legend_volume">Volume</string>
 
     <!-- Strings related to Settings -->
     <string name="multi_select_invalid_selection">Invalid selection!</string>
