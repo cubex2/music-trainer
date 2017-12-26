@@ -30,16 +30,14 @@ public enum ErrorType
         float error = Util.randomSign() * difficulty.getDurationError();
         tone.setDuration(tone.getDuration() + error);
 
-        if (prevTone != null && nextTone != null)
+        if (prevTone != null)
         {
             prevTone.setDuration(prevTone.getDuration() - error / 2F);
+        }
+
+        if (nextTone != null)
+        {
             nextTone.setDuration(nextTone.getDuration() - error / 2F);
-        } else if (prevTone != null)
-        {
-            prevTone.setDuration(prevTone.getDuration() - error);
-        } else if (nextTone != null)
-        {
-            nextTone.setDuration(nextTone.getDuration() - error);
         }
     }
 
