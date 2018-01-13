@@ -66,12 +66,13 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
             final int j = i;
             final float toneVolume = volume * volumes[i];
 
+            final int[] streamId = new int[1];
             timer.schedule(new TimerTask()
             {
                 @Override
                 public void run()
                 {
-                    soundPool.play(soundIDs[j], toneVolume, toneVolume, 1, 0, 1f);
+                    streamId[0] = soundPool.play(soundIDs[j], toneVolume, toneVolume, 1, 0, 1f);
                 }
             }, delay);
             timer.schedule(new TimerTask()
@@ -79,7 +80,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
                 @Override
                 public void run()
                 {
-                    soundPool.stop(soundIDs[j]);
+                    soundPool.pause(streamId[0]);
                 }
             }, delay + durations[i] + 50);
 
