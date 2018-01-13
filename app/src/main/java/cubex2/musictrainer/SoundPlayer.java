@@ -17,6 +17,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
     private float[] volumes;
     private OnLoadCompleteListener loadListener;
     private OnPlayCompleteListener playListener;
+    private ToneListener toneListener;
     private Timer timer = new Timer();
 
     private int numLoaded = 0;
@@ -51,6 +52,11 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
         this.playListener = playListener;
     }
 
+    public void setToneListener(ToneListener toneListener)
+    {
+        this.toneListener = toneListener;
+    }
+
     public void play(Context context)
     {
         AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -73,6 +79,8 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
                 public void run()
                 {
                     streamId[0] = soundPool.play(soundIDs[j], toneVolume, toneVolume, 1, 0, 1f);
+                    if (toneListener != null)
+                        toneListener.toneStarted(j);
                 }
             }, delay);
             timer.schedule(new TimerTask()
@@ -81,6 +89,8 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
                 public void run()
                 {
                     soundPool.pause(streamId[0]);
+                    if (toneListener != null)
+                        toneListener.toneStopped(j);
                 }
             }, delay + durations[i] + 50);
 
@@ -132,5 +142,12 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
     public interface OnPlayCompleteListener
     {
         void playbackComplete();
+    }
+
+    public interface ToneListener
+    {
+        void toneStarted(int toneIndex);
+
+        void toneStopped(int toneIndex);
     }
 }

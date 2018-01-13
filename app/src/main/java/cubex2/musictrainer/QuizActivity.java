@@ -37,6 +37,8 @@ public class QuizActivity extends AppCompatActivity
     private boolean submitted = false;
     private Quiz.Report report;
 
+    private int playingSound = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -53,6 +55,25 @@ public class QuizActivity extends AppCompatActivity
             btnPlay.setEnabled(true);
             btnSubmit.setEnabled(true);
         }));
+        player.setToneListener(new SoundPlayer.ToneListener()
+        {
+            @Override
+            public void toneStarted(int toneIndex)
+            {
+                playingSound = toneIndex;
+                handler.post(listView::invalidateViews);
+            }
+
+            @Override
+            public void toneStopped(int toneIndex)
+            {
+                if (toneIndex == quiz.getNumTones() - 1)
+                {
+                    playingSound = -1;
+                    handler.post(listView::invalidateViews);
+                }
+            }
+        });
 
         btnPlay = (Button) findViewById(R.id.play_button);
         btnPlay.setOnClickListener(view -> {
@@ -213,7 +234,10 @@ public class QuizActivity extends AppCompatActivity
             TextView textView = holder.getTextView();
             textView.setText("");
 
-            if (report != null)
+            if (playingSound == position)
+            {
+                convertView.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.quizPlaying, null));
+            } else if (report != null)
             {
                 if (report.errors.contains(position))
                 {
@@ -233,6 +257,9 @@ public class QuizActivity extends AppCompatActivity
                     ErrorType type = report.allErrors.get(position);
                     textView.setText(type.displayName);
                 }
+            } else
+            {
+                convertView.setBackgroundColor(android.R.color.white);
             }
 
             return convertView;
