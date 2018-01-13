@@ -17,6 +17,4 @@ public interface Difficulty
     float getDurationError();
 
     float getVolumeError();
-
-    int getFrequencyError();
 }

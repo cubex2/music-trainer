@@ -21,10 +21,4 @@ public class DifficultyDynamic extends DifficultyFromSettings
     {
         return Settings.getDynamicVolumeError(context);
     }
-
-    @Override
-    public int getFrequencyError()
-    {
-        return Settings.getDynamicFrequencyError(context);
-    }
 }

@@ -119,8 +119,6 @@ public class StatDbHelper extends SQLiteOpenHelper
                 return StatContract.StatEntry.COLUMN_NAME_HAS_DURATION_ERROR;
             case VOLUME:
                 return StatContract.StatEntry.COLUMN_NAME_HAS_VOLUME_ERROR;
-            case FREQUENCY:
-                return StatContract.StatEntry.COLUMN_NAME_HAS_FREQUENCY_ERROR;
             default:
                 throw new UnsupportedOperationException();
         }
@@ -134,8 +132,6 @@ public class StatDbHelper extends SQLiteOpenHelper
                 return StatContract.StatEntry.COLUMN_NAME_DURATION_ERROR;
             case VOLUME:
                 return StatContract.StatEntry.COLUMN_NAME_VOLUME_ERROR;
-            case FREQUENCY:
-                return StatContract.StatEntry.COLUMN_NAME_FREQUENCY_ERROR;
             default:
                 throw new UnsupportedOperationException();
         }

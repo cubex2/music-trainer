@@ -8,11 +8,11 @@ import java.util.List;
 public class DynamicDifficultyHelper
 {
     private static final float DURATION_ERROR_MIN = 0.05f;
-    private static final float DURATION_ERROR_MAX = 0.40f;
+    public static final float DURATION_ERROR_MAX = 0.40f;
     private static final float DURATION_ERROR_STEP = 0.05f;
 
     private static final float VOLUME_ERROR_MIN = 0.25f;
-    private static final float VOLUME_ERROR_MAX = 0.50f;
+    public static final float VOLUME_ERROR_MAX = 0.50f;
     private static final float VOLUME_ERROR_STEP = 0.05f;
 
     private static final int FREQUENCY_ERROR_MIN = 1;

@@ -49,8 +49,6 @@ public class StatEntry
                 return hasDurationError;
             case VOLUME:
                 return hasVolumeError;
-            case FREQUENCY:
-                return hasFrequencyError;
             default:
                 return false;
         }
@@ -64,8 +62,6 @@ public class StatEntry
                 return hasDurationMistake;
             case VOLUME:
                 return hasVolumeMistake;
-            case FREQUENCY:
-                return hasFrequencyMistake;
             default:
                 return false;
         }
@@ -79,8 +75,6 @@ public class StatEntry
                 return durationError;
             case VOLUME:
                 return volumeError;
-            case FREQUENCY:
-                return frequencyError;
             default:
                 throw new UnsupportedOperationException();
         }
@@ -124,6 +118,22 @@ public class StatEntry
     public long getTimeStamp()
     {
         return timeStamp;
+    }
+
+    @Override
+    public String toString()
+    {
+        return timeStamp +
+               "," + wasCorrect +
+               "," + durationError +
+               "," + volumeError +
+               "," + frequencyError +
+               "," + hasDurationError +
+               "," + hasVolumeError +
+               "," + hasFrequencyError +
+               "," + hasDurationMistake +
+               "," + hasVolumeMistake +
+               "," + hasFrequencyMistake;
     }
 
     @Override

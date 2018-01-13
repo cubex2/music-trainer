@@ -1,15 +1,13 @@
 package cubex2.musictrainer.data;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import cubex2.musictrainer.R;
 import cubex2.musictrainer.Util;
 
 public enum ErrorType
 {
     DURATION(R.string.error_type_duration, ErrorType::applyDurationError),
-    FREQUENCY(R.string.error_type_frequency, (difficulty, tone, prev, next) -> applyFrequencyError(difficulty, tone)),
-    VOLUME(R.string.error_type_volume, (difficulty, tone, prev, next) -> applyVolumeError(difficulty, tone));
+    VOLUME(R.string.error_type_volume, ErrorType::applyVolumeError);
 
     private final ErrorFunction errorFunction;
     public final int displayName;
@@ -20,31 +18,15 @@ public enum ErrorType
         this.errorFunction = errorFunction;
     }
 
-    public void apply(@NonNull Difficulty difficulty, @NonNull PlayableTone tone, @Nullable PlayableTone prevTone, @Nullable PlayableTone nextTone)
+    public void apply(@NonNull Difficulty difficulty, @NonNull PlayableTone tone)
     {
-        errorFunction.apply(difficulty, tone, prevTone, nextTone);
+        errorFunction.apply(difficulty, tone);
     }
 
-    private static void applyDurationError(@NonNull Difficulty difficulty, @NonNull PlayableTone tone, @Nullable PlayableTone prevTone, @Nullable PlayableTone nextTone)
+    private static void applyDurationError(@NonNull Difficulty difficulty, @NonNull PlayableTone tone)
     {
         float error = Util.randomSign() * difficulty.getDurationError();
         tone.setDuration(tone.getDuration() + error);
-
-        if (prevTone != null)
-        {
-            prevTone.setDuration(prevTone.getDuration() - error / 2F);
-        }
-
-        if (nextTone != null)
-        {
-            nextTone.setDuration(nextTone.getDuration() - error / 2F);
-        }
-    }
-
-    private static void applyFrequencyError(@NonNull Difficulty difficulty, @NonNull PlayableTone tone)
-    {
-        int error = difficulty.getFrequencyError();
-        tone.setTone(Tone.forKeyNumber(tone.getTone().getKeyNumber() + error));
     }
 
     private static void applyVolumeError(@NonNull Difficulty difficulty, @NonNull PlayableTone tone)
@@ -55,6 +37,6 @@ public enum ErrorType
 
     interface ErrorFunction
     {
-        void apply(@NonNull Difficulty difficulty, @NonNull PlayableTone tone, @Nullable PlayableTone prevTone, @Nullable PlayableTone nextTone);
+        void apply(@NonNull Difficulty difficulty, @NonNull PlayableTone tone);
     }
 }

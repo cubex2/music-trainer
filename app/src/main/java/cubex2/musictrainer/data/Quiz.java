@@ -88,9 +88,7 @@ public class Quiz
             ErrorType error = entry.getValue();
 
             PlayableTone tone = tones[index];
-            PlayableTone prevTone = index == 0 ? null : tones[index - 1];
-            PlayableTone nextTone = index == tones.length - 1 ? null : tones[index + 1];
-            error.apply(difficulty, tone, prevTone, nextTone);
+            error.apply(difficulty, tone);
         }
     }
 

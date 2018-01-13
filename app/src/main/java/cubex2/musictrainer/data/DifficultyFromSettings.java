@@ -12,7 +12,6 @@ public class DifficultyFromSettings implements Difficulty
 
     private final float durationError;
     private final float volumeError;
-    private final int frequencyError;
 
     public DifficultyFromSettings(Context context)
     {
@@ -20,7 +19,6 @@ public class DifficultyFromSettings implements Difficulty
 
         durationError = Util.randomElement(Settings.getDurationErrors(context));
         volumeError = Util.randomElement(Settings.getVolumeErrors(context));
-        frequencyError = Util.randomElement(Settings.getFrequencyErrors(context));
     }
 
     @Override
@@ -63,11 +61,5 @@ public class DifficultyFromSettings implements Difficulty
     public float getVolumeError()
     {
         return volumeError;
-    }
-
-    @Override
-    public int getFrequencyError()
-    {
-        return frequencyError;
     }
 }

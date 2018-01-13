@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import cubex2.musictrainer.R;
 import cubex2.musictrainer.Util;
+import cubex2.musictrainer.data.DynamicDifficultyHelper;
 import cubex2.musictrainer.data.ErrorType;
 
 import java.util.ArrayList;
@@ -56,14 +57,12 @@ public class Settings
 
         if (values.contains("duration"))
             list.add(ErrorType.DURATION);
-        if (values.contains("frequency"))
-            list.add(ErrorType.FREQUENCY);
         if (values.contains("volume"))
             list.add(ErrorType.VOLUME);
 
         if (list.isEmpty())
         {
-            Collections.addAll(list, ErrorType.values());
+            Collections.addAll(list, ErrorType.DURATION, ErrorType.VOLUME);
         }
 
         return list;
@@ -101,14 +100,6 @@ public class Settings
         return durations;
     }
 
-    public static List<Integer> getFrequencyErrors(Context context)
-    {
-        List<Integer> errors = new ArrayList<>();
-        errors.add(1);
-        errors.add(2);
-        return errors;
-    }
-
     public static List<Float> getVolumeErrors(Context context)
     {
         List<Float> errors = new ArrayList<>();
@@ -136,7 +127,7 @@ public class Settings
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String key = context.getString(R.string.dynamic_duration_error_key);
 
-        return preferences.getFloat(key, 0.25f);
+        return preferences.getFloat(key, DynamicDifficultyHelper.DURATION_ERROR_MAX);
     }
 
     public static float getDynamicVolumeError(Context context)
@@ -144,28 +135,18 @@ public class Settings
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String key = context.getString(R.string.dynamic_volume_error_key);
 
-        return preferences.getFloat(key, 0.5f);
+        return preferences.getFloat(key, DynamicDifficultyHelper.VOLUME_ERROR_MAX);
     }
 
-    public static int getDynamicFrequencyError(Context context)
-    {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String key = context.getString(R.string.dynamic_frequency_error_key);
-
-        return preferences.getInt(key, 1);
-    }
-
-    public static void setDynamicErrorValues(Context context, float duration, float volume, int frequency)
+    public static void setDynamicErrorValues(Context context, float duration, float volume)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         String durationKey = context.getString(R.string.dynamic_duration_error_key);
         String volumeKey = context.getString(R.string.dynamic_volume_error_key);
-        String frequencyKey = context.getString(R.string.dynamic_frequency_error_key);
 
         editor.putFloat(durationKey, duration);
         editor.putFloat(volumeKey, volume);
-        editor.putInt(frequencyKey, frequency);
 
         editor.commit();
     }
