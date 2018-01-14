@@ -11,7 +11,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:buttonTint="@color/checkboxColor"
-            android:layout_weight="1"/>
+            android:layout_weight="1" android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
     <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -20,5 +20,5 @@
             android:textColor="#ff000000"
             android:textAlignment="textEnd"
             android:layout_marginEnd="8dp"
-    />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 </LinearLayout>
