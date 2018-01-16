@@ -162,7 +162,7 @@ public class QuizActivity extends AppCompatActivity
 
     private List<StatEntry> entriesForErrorType(StatDbHelper helper, SQLiteDatabase db, ErrorType errorType, float current)
     {
-        return helper.readEntriesWithError(db, errorType, current, 20);
+        return helper.readEntriesWithError(db, errorType, current, 10);
     }
 
     private void nextQuiz(Quiz.Report report)
