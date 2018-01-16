@@ -15,10 +15,6 @@ public class DynamicDifficultyHelper
     public static final float VOLUME_ERROR_MAX = 0.50f;
     private static final float VOLUME_ERROR_STEP = 0.05f;
 
-    private static final int FREQUENCY_ERROR_MIN = 1;
-    private static final int FREQUENCY_ERROR_MAX = 2;
-    private static final int FREQUENCY_ERROR_STEP = 1;
-
     public static float normalizeDurationError(float error)
     {
         return 1f - (error - DURATION_ERROR_MIN) / (DURATION_ERROR_MAX - DURATION_ERROR_MIN);
@@ -41,13 +37,6 @@ public class DynamicDifficultyHelper
         int change = computeDifficultyChange(entries, ErrorType.VOLUME);
 
         return (float) MathUtils.clamp(current + change * VOLUME_ERROR_STEP, VOLUME_ERROR_MIN, VOLUME_ERROR_MAX);
-    }
-
-    public static int computeNewFrequencyError(int current, List<StatEntry> entries)
-    {
-        int change = computeDifficultyChange(entries, ErrorType.DURATION);
-
-        return MathUtils.clamp(current + change * FREQUENCY_ERROR_STEP, FREQUENCY_ERROR_MIN, FREQUENCY_ERROR_MAX);
     }
 
     /**
