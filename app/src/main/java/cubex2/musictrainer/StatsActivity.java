@@ -168,6 +168,8 @@ public class StatsActivity extends AppCompatActivity implements DialogInterface.
             }
             addSeriesToGraph(points, getString(R.string.legend_volume), Color.RED);
 
+            graph.getViewport().scrollToEnd();
+
             btnReset.setEnabled(true);
         }
 
