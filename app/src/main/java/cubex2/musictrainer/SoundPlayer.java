@@ -92,7 +92,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
                     if (toneListener != null)
                         toneListener.toneStopped(j);
                 }
-            }, delay + durations[i] + 50);
+            }, delay + durations[i]);
 
             delay += durations[i];
         }
@@ -107,7 +107,7 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
                     playListener.playbackComplete();
                 }
             }
-        }, delay + 50);
+        }, delay);
     }
 
     public void release()
