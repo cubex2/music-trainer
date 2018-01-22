@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Piano Trainer</string>
     <string name="button_play">Play Sequence</string>
+    <string name="button_play_stop">Stop Playback</string>
     <string name="submit_play">Submit</string>
     <string name="quiz_correct">Everything correct!</string>
     <string name="button_ok">OK</string>

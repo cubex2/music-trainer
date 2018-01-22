@@ -21,6 +21,8 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
     private Timer timer = new Timer();
 
     private int numLoaded = 0;
+    private int lastStreamId = -1;
+    private int lastSoundId = -1;
 
     public SoundPlayer(Context context, PlayableTone[] tones)
     {
@@ -66,48 +68,46 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
                 .getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         float volume = actualVolume / maxVolume;
 
-        int delay = 0;
-        for (int i = 0; i < soundIDs.length; i++)
-        {
-            final int j = i;
-            final float toneVolume = volume * volumes[i];
+        playTone(0, volume);
+    }
 
-            final int[] streamId = new int[1];
-            timer.schedule(new TimerTask()
-            {
-                @Override
-                public void run()
-                {
-                    streamId[0] = soundPool.play(soundIDs[j], toneVolume, toneVolume, 1, 0, 1f);
-                    if (toneListener != null)
-                        toneListener.toneStarted(j);
-                }
-            }, delay);
-            timer.schedule(new TimerTask()
-            {
-                @Override
-                public void run()
-                {
-                    soundPool.pause(streamId[0]);
-                    if (toneListener != null)
-                        toneListener.toneStopped(j);
-                }
-            }, delay + durations[i]);
-
-            delay += durations[i];
-        }
-
+    private void playTone(int index, float volume)
+    {
+        float toneVolume = volume * volumes[index];
+        int streamId = soundPool.play(soundIDs[index], toneVolume, toneVolume, 1, 0, 1f);
+        lastStreamId = streamId;
+        lastSoundId = index;
+        if (toneListener != null)
+            toneListener.toneStarted(index);
         timer.schedule(new TimerTask()
         {
             @Override
             public void run()
             {
-                if (playListener != null)
-                {
-                    playListener.playbackComplete();
-                }
+                if (lastSoundId == -1)
+                    return;
+
+                soundPool.stop(streamId);
+                if (toneListener != null)
+                    toneListener.toneStopped(index);
+
+                playTone((index + 1) % soundIDs.length, volume);
             }
-        }, delay);
+        }, durations[index]);
+    }
+
+    public void stop()
+    {
+        if (lastSoundId >= 0)
+        {
+            soundPool.stop(lastStreamId);
+            if (toneListener != null)
+                toneListener.toneStopped(lastSoundId);
+            lastStreamId = -1;
+            lastSoundId = -1;
+            if (playListener != null)
+                playListener.playbackComplete();
+        }
     }
 
     public void release()

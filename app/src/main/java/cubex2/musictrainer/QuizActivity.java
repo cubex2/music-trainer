@@ -29,7 +29,7 @@ public class QuizActivity extends AppCompatActivity
     private ListView listView;
 
     private Quiz quiz;
-    Handler handler = new Handler();
+    private Handler handler = new Handler();
 
     private SoundPlayer player;
 
@@ -52,8 +52,8 @@ public class QuizActivity extends AppCompatActivity
         player = new SoundPlayer(this, quiz.getTones());
         player.setOnLoadCompleteListener(() -> btnPlay.setEnabled(true));
         player.setOnPlayCompleteListener(() -> handler.post(() -> {
-            btnPlay.setEnabled(true);
             btnSubmit.setEnabled(true);
+            handler.post(listView::invalidateViews);
         }));
         player.setToneListener(new SoundPlayer.ToneListener()
         {
@@ -67,10 +67,10 @@ public class QuizActivity extends AppCompatActivity
             @Override
             public void toneStopped(int toneIndex)
             {
+                playingSound = -1;
                 if (toneIndex == quiz.getNumTones() - 1)
                 {
-                    playingSound = -1;
-                    handler.post(listView::invalidateViews);
+                    handler.post(() -> btnSubmit.setEnabled(true));
                 }
             }
         });
@@ -78,10 +78,13 @@ public class QuizActivity extends AppCompatActivity
         btnPlay = (Button) findViewById(R.id.play_button);
         btnPlay.setOnClickListener(view -> {
             // Use a new tread as this can take a while
-            btnPlay.setEnabled(false);
-            btnSubmit.setEnabled(false);
-            final Thread thread = new Thread(() -> handler.post(this::playSound));
-            thread.start();
+            if (playingSound < 0)
+            {
+                startPlayBack();
+            } else
+            {
+                stopPlayBack();
+            }
         });
         btnPlay.setEnabled(false);
 
@@ -103,8 +106,24 @@ public class QuizActivity extends AppCompatActivity
         return Quiz.fromDifficulty(difficulty, minTone, maxTone);
     }
 
+    private void startPlayBack()
+    {
+        btnPlay.setText(R.string.button_play_stop);
+
+        final Thread thread = new Thread(() -> handler.post(() -> player.play(this)));
+        thread.start();
+    }
+
+    private void stopPlayBack()
+    {
+        player.stop();
+        btnPlay.setText(R.string.button_play);
+    }
+
     private void submit()
     {
+        player.stop();
+
         Set<Integer> selectedTones = new HashSet<>();
         for (int i = 0; i < tonesChecked.length; i++)
         {
@@ -183,11 +202,6 @@ public class QuizActivity extends AppCompatActivity
         super.onDestroy();
 
         player.release();
-    }
-
-    void playSound()
-    {
-        player.play(this);
     }
 
     private class ListAdapter extends BaseAdapter
