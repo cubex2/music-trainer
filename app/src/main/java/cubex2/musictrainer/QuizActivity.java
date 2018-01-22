@@ -227,7 +227,7 @@ public class QuizActivity extends AppCompatActivity
 
             CheckBox checkBox = holder.getCheckBox();
             checkBox.setClickable(!submitted);
-            checkBox.setText(quiz.getTones()[position].getTone().getName());
+            checkBox.setText(String.valueOf(position + 1));
             checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> tonesChecked[position] = isChecked);
             checkBox.setChecked(tonesChecked[position]);
 
