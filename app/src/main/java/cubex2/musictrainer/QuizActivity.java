@@ -27,6 +27,10 @@ public class QuizActivity extends AppCompatActivity
     private Button btnPlay;
     private Button btnSubmit;
     private ListView listView;
+    private TextView tvDuration;
+    private SeekBar seekBarDuration;
+    private TextView tvVolume;
+    private SeekBar seekBarVolume;
 
     private Quiz quiz;
     private Handler handler = new Handler();
@@ -93,6 +97,56 @@ public class QuizActivity extends AppCompatActivity
 
         listView = (ListView) findViewById(R.id.quiz_list_view);
         listView.setAdapter(new ListAdapter());
+
+        tvDuration = (TextView) findViewById(R.id.duration_tv);
+        seekBarDuration = (SeekBar) findViewById(R.id.duration_seekBar);
+        seekBarDuration.setEnabled(false);
+        seekBarDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                tvDuration.setText(getResources().getString(R.string.quiz_duration, ErrorType.DURATION.errorForIndex(progress)));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+        });
+        seekBarDuration.setProgress(quiz.difficulty.getDurationErrorIndex());
+
+        tvVolume = (TextView) findViewById(R.id.volume_tv);
+        seekBarVolume = (SeekBar) findViewById(R.id.volume_seekBar);
+        seekBarVolume.setEnabled(false);
+        seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                tvVolume.setText(getResources().getString(R.string.quiz_volume, Math.round(ErrorType.VOLUME.errorForIndex(progress) * 100f)));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+        });
+        seekBarVolume.setProgress(quiz.difficulty.getVolumeErrorIndex());
     }
 
     private Quiz createQuiz()
@@ -123,6 +177,14 @@ public class QuizActivity extends AppCompatActivity
     private void submit()
     {
         player.stop();
+
+        if (!(quiz.difficulty instanceof DifficultyDynamic))
+        {
+            tvDuration.setTextColor(0xff000000);
+            tvVolume.setTextColor(0xff000000);
+            seekBarDuration.setEnabled(true);
+            seekBarVolume.setEnabled(true);
+        }
 
         Set<Integer> selectedTones = new HashSet<>();
         for (int i = 0; i < tonesChecked.length; i++)
@@ -168,13 +230,13 @@ public class QuizActivity extends AppCompatActivity
 
         List<StatEntry> entries;
 
-        float currentDuration = Settings.getDynamicDurationError(this);
-        entries = entriesForErrorType(helper, db, ErrorType.DURATION, currentDuration);
-        float newDuration = DynamicDifficultyHelper.computeNewDurationError(currentDuration, entries);
+        int currentDuration = Settings.getDynamicDurationErrorIndex(this);
+        entries = entriesForErrorType(helper, db, ErrorType.DURATION, ErrorType.DURATION.errorForIndex(currentDuration));
+        int newDuration = DynamicDifficultyHelper.computeNewDurationError(currentDuration, entries);
 
-        float currentVolume = Settings.getDynamicVolumeError(this);
-        entries = entriesForErrorType(helper, db, ErrorType.VOLUME, currentVolume);
-        float newVolume = DynamicDifficultyHelper.computeNewVolumeError(currentVolume, entries);
+        int currentVolume = Settings.getDynamicVolumeErrorIndex(this);
+        entries = entriesForErrorType(helper, db, ErrorType.VOLUME, ErrorType.VOLUME.errorForIndex(currentVolume));
+        int newVolume = DynamicDifficultyHelper.computeNewVolumeError(currentVolume, entries);
 
         Settings.setDynamicErrorValues(this, newDuration, newVolume);
     }
@@ -186,6 +248,15 @@ public class QuizActivity extends AppCompatActivity
 
     private void nextQuiz(Quiz.Report report)
     {
+        if (!(quiz.difficulty instanceof DifficultyDynamic))
+        {
+            int newDuration = seekBarDuration.getProgress();
+            Settings.setDurationError(this, newDuration);
+
+            int newVolume = seekBarVolume.getProgress();
+            Settings.setVolumeError(this, newVolume);
+        }
+
         StatDbHelper helper = new StatDbHelper(this);
         updateStats(helper, report);
         updateDynamicDifficulty(helper);

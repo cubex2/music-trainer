@@ -34,10 +34,13 @@ public class SettingsActivity extends AppCompatActivity
                 int index = listPreference.findIndexOfValue(stringValue);
 
                 // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                        ? listPreference.getEntries()[index]
-                        : null);
+                String summary = index >= 0
+                                       ? String.valueOf(listPreference.getEntries()[index])
+                                       : null;
+                if (summary != null && summary.endsWith("%"))
+                    summary += "%";
+
+                preference.setSummary(summary);
 
             } else if (preference instanceof MultiSelectListPreference)
             {
@@ -155,6 +158,7 @@ public class SettingsActivity extends AppCompatActivity
             initPreference(listener, findPreference(getString(R.string.pref_error_types_key)));
             initPreference(listener, findPreference(getString(R.string.pref_num_tones_key)));
             initPreference(listener, findPreference(getString(R.string.pref_duration_error_key)));
+            initPreference(listener, findPreference(getString(R.string.pref_volume_error_key)));
             initPreference(listener, findPreference(getString(R.string.pref_use_dynamic_difficulty_key)));
         }
 

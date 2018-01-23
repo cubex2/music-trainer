@@ -1,7 +1,6 @@
 package cubex2.musictrainer.data;
 
 import android.content.Context;
-import cubex2.musictrainer.Util;
 import cubex2.musictrainer.config.Settings;
 
 import java.util.List;
@@ -10,15 +9,15 @@ public class DifficultyFromSettings implements Difficulty
 {
     protected final Context context;
 
-    private final float durationError;
-    private final float volumeError;
+    private final int durationErrorIndex;
+    private final int volumeErrorIndex;
 
     public DifficultyFromSettings(Context context)
     {
         this.context = context;
 
-        durationError = Util.randomElement(Settings.getDurationErrors(context));
-        volumeError = Util.randomElement(Settings.getVolumeErrors(context));
+        durationErrorIndex = Settings.getDurationErrorIndex(context);
+        volumeErrorIndex = Settings.getVolumeErrorIndex(context);
     }
 
     @Override
@@ -52,14 +51,26 @@ public class DifficultyFromSettings implements Difficulty
     }
 
     @Override
+    public int getDurationErrorIndex()
+    {
+        return durationErrorIndex;
+    }
+
+    @Override
+    public int getVolumeErrorIndex()
+    {
+        return volumeErrorIndex;
+    }
+
+    @Override
     public float getDurationError()
     {
-        return durationError;
+        return ErrorType.DURATION.errorForIndex(getDurationErrorIndex());
     }
 
     @Override
     public float getVolumeError()
     {
-        return volumeError;
+        return ErrorType.VOLUME.errorForIndex(getVolumeErrorIndex());
     }
 }

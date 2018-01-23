@@ -154,7 +154,7 @@ public class StatsActivity extends AppCompatActivity implements DialogInterface.
             for (int i = 0; i < points.length; i++)
             {
                 StatEntry entry = statEntries.get(i);
-                float value = DynamicDifficultyHelper.normalizeDurationError(entry.getDurationError())*100f;
+                float value = DynamicDifficultyHelper.normalizeDurationError(entry.getDurationError()) * 100f;
                 points[i] = new DataPoint(i, value);
             }
             addSeriesToGraph(points, getString(R.string.legend_duration), 0xff0077cc);
@@ -163,7 +163,7 @@ public class StatsActivity extends AppCompatActivity implements DialogInterface.
             for (int i = 0; i < points.length; i++)
             {
                 StatEntry entry = statEntries.get(i);
-                float value = DynamicDifficultyHelper.normalizeVolumeError(entry.getVolumeError())*100f;
+                float value = DynamicDifficultyHelper.normalizeVolumeError(entry.getVolumeError()) * 100f;
                 points[i] = new DataPoint(i, value);
             }
             addSeriesToGraph(points, getString(R.string.legend_volume), Color.RED);

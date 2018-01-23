@@ -14,7 +14,11 @@ public interface Difficulty
 
     List<ErrorType> getErrorTypes();
 
+    int getDurationErrorIndex();
+
     float getDurationError();
+
+    int getVolumeErrorIndex();
 
     float getVolumeError();
 }

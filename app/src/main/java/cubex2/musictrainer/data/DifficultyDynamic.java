@@ -11,14 +11,14 @@ public class DifficultyDynamic extends DifficultyFromSettings
     }
 
     @Override
-    public float getDurationError()
+    public int getDurationErrorIndex()
     {
-        return Settings.getDynamicDurationError(context);
+        return Settings.getDynamicDurationErrorIndex(context);
     }
 
     @Override
-    public float getVolumeError()
+    public int getVolumeErrorIndex()
     {
-        return Settings.getDynamicVolumeError(context);
+        return Settings.getDynamicVolumeErrorIndex(context);
     }
 }

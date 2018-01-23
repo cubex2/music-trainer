@@ -7,36 +7,32 @@ import java.util.List;
 
 public class DynamicDifficultyHelper
 {
-    private static final float DURATION_ERROR_MIN = 0.05f;
-    public static final float DURATION_ERROR_MAX = 0.40f;
-    private static final float DURATION_ERROR_STEP = 0.05f;
-
-    private static final float VOLUME_ERROR_MIN = 0.25f;
-    public static final float VOLUME_ERROR_MAX = 0.50f;
-    private static final float VOLUME_ERROR_STEP = 0.05f;
-
     public static float normalizeDurationError(float error)
     {
-        return 1f - (error - DURATION_ERROR_MIN) / (DURATION_ERROR_MAX - DURATION_ERROR_MIN);
+        float min = ErrorType.DURATION.errorForIndex(ErrorType.DURATION.numErrorValues - 1);
+        float max = ErrorType.DURATION.errorForIndex(0);
+        return 1f - (error - min) / (max - min);
     }
 
     public static float normalizeVolumeError(float error)
     {
-        return 1f - (error - VOLUME_ERROR_MIN) / (VOLUME_ERROR_MAX - VOLUME_ERROR_MIN);
+        float min = ErrorType.VOLUME.errorForIndex(ErrorType.VOLUME.numErrorValues - 1);
+        float max = ErrorType.VOLUME.errorForIndex(0);
+        return 1f - (error - min) / (max - min);
     }
 
-    public static float computeNewDurationError(float current, List<StatEntry> entries)
+    public static int computeNewDurationError(int current, List<StatEntry> entries)
     {
         int change = computeDifficultyChange(entries, ErrorType.DURATION);
 
-        return (float) MathUtils.clamp(current + change * DURATION_ERROR_STEP, DURATION_ERROR_MIN, DURATION_ERROR_MAX);
+        return MathUtils.clamp(current + change, 0, ErrorType.DURATION.numErrorValues - 1);
     }
 
-    public static float computeNewVolumeError(float current, List<StatEntry> entries)
+    public static int computeNewVolumeError(int current, List<StatEntry> entries)
     {
         int change = computeDifficultyChange(entries, ErrorType.VOLUME);
 
-        return (float) MathUtils.clamp(current + change * VOLUME_ERROR_STEP, VOLUME_ERROR_MIN, VOLUME_ERROR_MAX);
+        return MathUtils.clamp(current + change, 0, ErrorType.VOLUME.numErrorValues - 1);
     }
 
     /**
@@ -51,9 +47,9 @@ public class DynamicDifficultyHelper
         int mistakes = getNumMistakes(entries, errorType);
         float mistakeRatio = mistakes / (float) errors;
         if (mistakeRatio >= 0.333f)
-            return 1;
-        else if (mistakeRatio < 0.1f)
             return -1;
+        else if (mistakeRatio < 0.1f)
+            return 1;
         else
             return 0;
     }
