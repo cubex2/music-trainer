@@ -6,8 +6,8 @@ import cubex2.musictrainer.Util;
 
 public enum ErrorType
 {
-    DURATION(R.string.error_type_duration, ErrorType::applyDurationError, 0.05f, 0.05f, 8),
-    VOLUME(R.string.error_type_volume, ErrorType::applyVolumeError, 0.15f, 0.05f, 8);
+    DURATION(R.string.error_type_duration, ErrorType::applyDurationError, 0.01f, 0.01f, 10),
+    VOLUME(R.string.error_type_volume, ErrorType::applyVolumeError, 0.05f, 0.05f, 10);
 
     private final ErrorFunction errorFunction;
     public final int displayName;
