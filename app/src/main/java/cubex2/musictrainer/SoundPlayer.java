@@ -73,6 +73,9 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
 
     private void playTone(int index, float volume)
     {
+        if (soundPool == null)
+            return;
+
         float toneVolume = volume * volumes[index];
         int streamId = soundPool.play(soundIDs[index], toneVolume, toneVolume, 1, 0, 1f);
         lastStreamId = streamId;
@@ -112,6 +115,8 @@ public class SoundPlayer implements SoundPool.OnLoadCompleteListener
 
     public void release()
     {
+        stop();
+
         for (int soundID : soundIDs)
         {
             soundPool.unload(soundID);

@@ -42,6 +42,7 @@ public class QuizActivity extends AppCompatActivity
     private Quiz.Report report;
 
     private int playingSound = -1;
+    private boolean nextClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,7 +55,7 @@ public class QuizActivity extends AppCompatActivity
         tonesChecked = new boolean[quiz.getNumTones()];
 
         player = new SoundPlayer(this, quiz.getTones());
-        player.setOnLoadCompleteListener(() -> btnPlay.setEnabled(true));
+        player.setOnLoadCompleteListener(() -> btnPlay.setEnabled(!nextClicked));
         player.setOnPlayCompleteListener(() -> handler.post(() -> {
             btnSubmit.setEnabled(true);
             handler.post(listView::invalidateViews);
@@ -72,7 +73,7 @@ public class QuizActivity extends AppCompatActivity
             public void toneStopped(int toneIndex)
             {
                 playingSound = -1;
-                if (toneIndex == quiz.getNumTones() - 1)
+                if (toneIndex == quiz.getNumTones() - 1 && !nextClicked)
                 {
                     handler.post(() -> btnSubmit.setEnabled(true));
                 }
@@ -176,7 +177,7 @@ public class QuizActivity extends AppCompatActivity
 
     private void submit()
     {
-        player.stop();
+        stopPlayBack();
 
         if (!(quiz.difficulty instanceof DifficultyDynamic))
         {
@@ -248,6 +249,12 @@ public class QuizActivity extends AppCompatActivity
 
     private void nextQuiz(Quiz.Report report)
     {
+        nextClicked = true;
+        btnPlay.setEnabled(false);
+        btnSubmit.setEnabled(false);
+        stopPlayBack();
+        player.release();
+
         if (!(quiz.difficulty instanceof DifficultyDynamic))
         {
             int newDuration = seekBarDuration.getProgress();
@@ -271,8 +278,6 @@ public class QuizActivity extends AppCompatActivity
     protected void onDestroy()
     {
         super.onDestroy();
-
-        player.release();
     }
 
     private class ListAdapter extends BaseAdapter
