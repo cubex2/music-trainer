@@ -6,7 +6,6 @@ import java.util.*;
 
 public class Quiz
 {
-    private static final float TONE_DURATION = 0.5f;
     private static final float TONE_VOLUME = 1f;
 
     public final Difficulty difficulty;
@@ -24,16 +23,16 @@ public class Quiz
 
         errorIndices = computeErrorIndices(numErrors, 0, sequence.getTones().size() - 1);
 
-        initErrors(sequence);
+        initErrors(sequence, difficulty.getToneDuration());
     }
 
-    private void initErrors(ToneSequence sequence)
+    private void initErrors(ToneSequence sequence, float toneDuration)
     {
         int numTones = sequence.getTones().size();
         tones = new PlayableTone[numTones];
         for (int i = 0; i < tones.length; i++)
         {
-            tones[i] = new PlayableTone(sequence.getTones().get(i), TONE_DURATION, TONE_VOLUME);
+            tones[i] = new PlayableTone(sequence.getTones().get(i), toneDuration, TONE_VOLUME);
         }
 
         applyErrors(errorIndices);

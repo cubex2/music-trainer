@@ -16,6 +16,7 @@
     <string name="select_error">Select incorrect tones:</string>
     <string name="quiz_duration">Duration error: %1$.2f s</string>
     <string name="quiz_volume">Volume error: %1$d%%</string>
+    <string name="quiz_tone_duration">Tone duration: %1$.2f s</string>
 
 
     <!-- Stats -->
@@ -62,6 +63,33 @@
     <string-array name="pref_sequence_types_entries">
         <item>Scale</item>
         <item>Arpeggio</item>
+    </string-array>
+
+    <string name="pref_tone_duration_key">tone_duration</string>
+    <string name="pref_tone_duration">Tone Duration</string>
+    <string-array name="pref_tone_duration_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+    <string-array name="pref_tone_duration_entries">
+        <item>0.60s</item>
+        <item>0.55s</item>
+        <item>0.50s</item>
+        <item>0.45s</item>
+        <item>0.40s</item>
+        <item>0.35s</item>
+        <item>0.30s</item>
+        <item>0.25s</item>
+        <item>0.20s</item>
+        <item>0.15s</item>
     </string-array>
 
     <string name="pref_duration_error_key">duration_error</string>

@@ -9,6 +9,7 @@ public class DifficultyFromSettings implements Difficulty
 {
     protected final Context context;
 
+    private final int toneDurationIndex;
     private final int durationErrorIndex;
     private final int volumeErrorIndex;
 
@@ -18,6 +19,7 @@ public class DifficultyFromSettings implements Difficulty
 
         durationErrorIndex = Settings.getDurationErrorIndex(context);
         volumeErrorIndex = Settings.getVolumeErrorIndex(context);
+        toneDurationIndex = Settings.getToneDurationIndex(context);
     }
 
     @Override
@@ -42,6 +44,18 @@ public class DifficultyFromSettings implements Difficulty
     public boolean useArpeggios()
     {
         return Settings.useArpeggios(context);
+    }
+
+    @Override
+    public int getToneDurationIndex()
+    {
+        return toneDurationIndex;
+    }
+
+    @Override
+    public float getToneDuration()
+    {
+        return Settings.toneDurationForIndex(getToneDurationIndex());
     }
 
     @Override

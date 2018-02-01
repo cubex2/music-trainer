@@ -55,6 +55,17 @@
             android:id="@+id/volume_seekBar" android:layout_marginBottom="8dp" android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent" android:layout_marginLeft="8dp"
             app:layout_constraintLeft_toLeftOf="parent" android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.0" app:layout_constraintBottom_toTopOf="@+id/tone_duration_tv"/>
+    <SeekBar
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="9"
+            android:progress="1"
+            android:id="@+id/tone_duration_seekBar" android:layout_marginBottom="8dp" android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent" android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent" android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp" app:layout_constraintBottom_toTopOf="@+id/submit_button"/>
     <TextView
             android:text="@string/quiz_duration"
@@ -70,6 +81,15 @@
             android:layout_height="wrap_content"
             android:id="@+id/volume_tv" android:layout_marginLeft="8dp" app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/volume_seekBar"
+            android:layout_marginStart="8dp"
+    />
+    <TextView
+            android:text="@string/quiz_tone_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tone_duration_tv" android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/tone_duration_seekBar"
             android:layout_marginStart="8dp"
     />
     <View

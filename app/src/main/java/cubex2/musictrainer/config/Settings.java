@@ -112,6 +112,33 @@ public class Settings
         editor.commit();
     }
 
+    public static int getToneDurationIndex(Context context)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String key = context.getString(R.string.pref_tone_duration_key);
+
+        return Integer.valueOf(preferences.getString(key, "0"));
+    }
+
+    public static void setToneDuration(Context context, int value)
+    {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        String key = context.getString(R.string.pref_tone_duration_key);
+
+        editor.putString(key, String.valueOf(value));
+
+        editor.commit();
+    }
+
+    public static float toneDurationForIndex(int index)
+    {
+        if (index < 0 || index >= 10)
+            return 0.6f;
+
+        return 0.6f - (index * 0.05f);
+    }
+
     public static int getMinimumStartToneKey(Context context)
     {
         return 30;

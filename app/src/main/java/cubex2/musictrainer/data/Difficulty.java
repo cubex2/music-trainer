@@ -12,6 +12,10 @@ public interface Difficulty
 
     boolean useArpeggios();
 
+    int getToneDurationIndex();
+
+    float getToneDuration();
+
     List<ErrorType> getErrorTypes();
 
     int getDurationErrorIndex();

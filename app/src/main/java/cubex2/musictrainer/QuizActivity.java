@@ -31,6 +31,8 @@ public class QuizActivity extends AppCompatActivity
     private SeekBar seekBarDuration;
     private TextView tvVolume;
     private SeekBar seekBarVolume;
+    private TextView tvToneDuration;
+    private SeekBar seekBarToneDuration;
 
     private Quiz quiz;
     private Handler handler = new Handler();
@@ -148,6 +150,31 @@ public class QuizActivity extends AppCompatActivity
             }
         });
         seekBarVolume.setProgress(quiz.difficulty.getVolumeErrorIndex());
+
+        tvToneDuration = (TextView) findViewById(R.id.tone_duration_tv);
+        seekBarToneDuration = (SeekBar) findViewById(R.id.tone_duration_seekBar);
+        seekBarToneDuration.setEnabled(false);
+        seekBarToneDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
+                tvToneDuration.setText(getResources().getString(R.string.quiz_tone_duration, Settings.toneDurationForIndex(progress)));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
+
+            }
+        });
+        seekBarToneDuration.setProgress(quiz.difficulty.getToneDurationIndex());
     }
 
     private Quiz createQuiz()
@@ -183,6 +210,7 @@ public class QuizActivity extends AppCompatActivity
         {
             tvDuration.setTextColor(0xff000000);
             tvVolume.setTextColor(0xff000000);
+            seekBarToneDuration.setEnabled(true);
             seekBarDuration.setEnabled(true);
             seekBarVolume.setEnabled(true);
         }
@@ -262,6 +290,9 @@ public class QuizActivity extends AppCompatActivity
 
             int newVolume = seekBarVolume.getProgress();
             Settings.setVolumeError(this, newVolume);
+
+            int newToneDuration = seekBarToneDuration.getProgress();
+            Settings.setToneDuration(this, newToneDuration);
         }
 
         StatDbHelper helper = new StatDbHelper(this);

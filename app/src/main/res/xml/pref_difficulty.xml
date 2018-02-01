@@ -28,6 +28,13 @@
 
     </ListPreference>
 
+    <ListPreference android:key="@string/pref_tone_duration_key"
+                    android:title="@string/pref_tone_duration"
+                    android:defaultValue="0"
+                    android:entries="@array/pref_tone_duration_entries"
+                    android:entryValues="@array/pref_tone_duration_values">
+    </ListPreference>
+
     <MultiSelectListPreference android:key="@string/pref_error_types_key"
                                android:title="@string/pref_error_types"
                                android:defaultValue="@array/pref_error_types_default_values"

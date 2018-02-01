@@ -160,6 +160,7 @@ public class SettingsActivity extends AppCompatActivity
             initPreference(listener, findPreference(getString(R.string.pref_duration_error_key)));
             initPreference(listener, findPreference(getString(R.string.pref_volume_error_key)));
             initPreference(listener, findPreference(getString(R.string.pref_use_dynamic_difficulty_key)));
+            initPreference(listener, findPreference(getString(R.string.pref_tone_duration_key)));
         }
 
         @Override
