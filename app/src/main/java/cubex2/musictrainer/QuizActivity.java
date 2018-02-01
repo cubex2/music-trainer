@@ -239,15 +239,12 @@ public class QuizActivity extends AppCompatActivity
 
         values.put(StatContract.StatEntry.COLUMN_NAME_DURATION_ERROR, quiz.difficulty.getDurationError());
         values.put(StatContract.StatEntry.COLUMN_NAME_VOLUME_ERROR, quiz.difficulty.getVolumeError());
-        values.put(StatContract.StatEntry.COLUMN_NAME_FREQUENCY_ERROR, 0);
 
         values.put(StatContract.StatEntry.COLUMN_NAME_HAS_DURATION_ERROR, report.hasError(ErrorType.DURATION));
         values.put(StatContract.StatEntry.COLUMN_NAME_HAS_VOLUME_ERROR, report.hasError(ErrorType.VOLUME));
-        values.put(StatContract.StatEntry.COLUMN_NAME_HAS_FREQUENCY_ERROR, false);
 
         values.put(StatContract.StatEntry.COLUMN_NAME_HAS_DURATION_MISTAKE, report.hasMistake(ErrorType.DURATION));
         values.put(StatContract.StatEntry.COLUMN_NAME_HAS_VOLUME_MISTAKE, report.hasMistake(ErrorType.VOLUME));
-        values.put(StatContract.StatEntry.COLUMN_NAME_HAS_FREQUENCY_MISTAKE, false);
 
         SQLiteDatabase db = helper.getWritableDatabase();
         db.insert(StatContract.StatEntry.TABLE_NAME, null, values);

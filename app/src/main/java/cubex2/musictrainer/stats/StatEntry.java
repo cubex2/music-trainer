@@ -8,33 +8,27 @@ public class StatEntry
     private boolean wasCorrect;
     private float durationError;
     private float volumeError;
-    private int frequencyError;
     private boolean hasDurationError;
     private boolean hasVolumeError;
-    private boolean hasFrequencyError;
     private boolean hasDurationMistake;
     private boolean hasVolumeMistake;
-    private boolean hasFrequencyMistake;
 
     public StatEntry(long timeStamp, boolean wasCorrect,
-                     float durationError, float volumeError, int frequencyError,
-                     boolean hasDurationError, boolean hasVolumeError, boolean hasFrequencyError,
-                     boolean hasDurationMistake, boolean hasVolumeMistake, boolean hasFrequencyMistake)
+                     float durationError, float volumeError,
+                     boolean hasDurationError, boolean hasVolumeError,
+                     boolean hasDurationMistake, boolean hasVolumeMistake)
     {
         this.timeStamp = timeStamp;
         this.wasCorrect = wasCorrect;
 
         this.durationError = durationError;
         this.volumeError = volumeError;
-        this.frequencyError = frequencyError;
 
         this.hasDurationError = hasDurationError;
         this.hasVolumeError = hasVolumeError;
-        this.hasFrequencyError = hasFrequencyError;
 
         this.hasDurationMistake = hasDurationMistake;
         this.hasVolumeMistake = hasVolumeMistake;
-        this.hasFrequencyMistake = hasFrequencyMistake;
     }
 
     private StatEntry()
@@ -95,11 +89,6 @@ public class StatEntry
         return volumeError;
     }
 
-    public int getFrequencyError()
-    {
-        return frequencyError;
-    }
-
     public boolean hasDurationError()
     {
         return hasDurationError;
@@ -108,11 +97,6 @@ public class StatEntry
     public boolean hasVolumeError()
     {
         return hasVolumeError;
-    }
-
-    public boolean hasFrequencyError()
-    {
-        return hasFrequencyError;
     }
 
     public long getTimeStamp()
@@ -127,13 +111,10 @@ public class StatEntry
                "," + wasCorrect +
                "," + durationError +
                "," + volumeError +
-               "," + frequencyError +
                "," + hasDurationError +
                "," + hasVolumeError +
-               "," + hasFrequencyError +
                "," + hasDurationMistake +
-               "," + hasVolumeMistake +
-               "," + hasFrequencyMistake;
+               "," + hasVolumeMistake;
     }
 
     @Override

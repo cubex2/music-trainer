@@ -21,13 +21,10 @@ public class StatDbHelper extends SQLiteOpenHelper
                                                    StatContract.StatEntry.COLUMN_NAME_TIMESTAMP + " INTEGER," +
                                                    StatContract.StatEntry.COLUMN_NAME_DURATION_ERROR + " REAL," +
                                                    StatContract.StatEntry.COLUMN_NAME_VOLUME_ERROR + " REAL," +
-                                                   StatContract.StatEntry.COLUMN_NAME_FREQUENCY_ERROR + " INTEGER," +
                                                    StatContract.StatEntry.COLUMN_NAME_HAS_DURATION_ERROR + " INTEGER," +
                                                    StatContract.StatEntry.COLUMN_NAME_HAS_VOLUME_ERROR + " INTEGER," +
-                                                   StatContract.StatEntry.COLUMN_NAME_HAS_FREQUENCY_ERROR + " INTEGER," +
                                                    StatContract.StatEntry.COLUMN_NAME_HAS_DURATION_MISTAKE + " INTEGER," +
                                                    StatContract.StatEntry.COLUMN_NAME_HAS_VOLUME_MISTAKE + " INTEGER," +
-                                                   StatContract.StatEntry.COLUMN_NAME_HAS_FREQUENCY_MISTAKE + " INTEGER," +
                                                    StatContract.StatEntry.COLUMN_NAME_CORRECT + " INTEGER)";
 
     private static final String SQL_DELETE_STATS = "DROP TABLE IF EXISTS " + StatContract.StatEntry.TABLE_NAME;
@@ -174,19 +171,16 @@ public class StatDbHelper extends SQLiteOpenHelper
 
         float durationError = cursor.getFloat(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_DURATION_ERROR));
         float volumeError = cursor.getFloat(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_VOLUME_ERROR));
-        int frequencyError = cursor.getInt(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_FREQUENCY_ERROR));
 
         boolean hasDurationError = cursor.getInt(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_HAS_DURATION_ERROR)) == 1;
         boolean hasVolumeError = cursor.getInt(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_HAS_VOLUME_ERROR)) == 1;
-        boolean hasFrequencyError = cursor.getInt(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_HAS_FREQUENCY_ERROR)) == 1;
 
         boolean hasDurationMistake = cursor.getInt(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_HAS_DURATION_MISTAKE)) == 1;
         boolean hasVolumeMistake = cursor.getInt(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_HAS_VOLUME_MISTAKE)) == 1;
-        boolean hasFrequencyMistake = cursor.getInt(cursor.getColumnIndex(StatContract.StatEntry.COLUMN_NAME_HAS_FREQUENCY_MISTAKE)) == 1;
 
         return new StatEntry(timeStamp, wasCorrect,
-                             durationError, volumeError, frequencyError,
-                             hasDurationError, hasVolumeError, hasFrequencyError,
-                             hasDurationMistake, hasVolumeMistake, hasFrequencyMistake);
+                             durationError, volumeError,
+                             hasDurationError, hasVolumeError,
+                             hasDurationMistake, hasVolumeMistake);
     }
 }
