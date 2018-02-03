@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Quiz
 {
-    private static final float TONE_VOLUME = 1f;
+    private static final float TONE_VOLUME = 0.65f;
 
     public final Difficulty difficulty;
     private final Map<Integer, Pair<ErrorType, Integer>> errors;
@@ -101,7 +101,7 @@ public class Quiz
         {
             int index = Util.randomInRange(minIndex, maxIndex);
             ErrorType error = Util.randomElement(activeErrors);
-            int sign = error == ErrorType.VOLUME ? 1 : Util.randomSign();
+            int sign = Util.randomSign();
             indices.put(index, Pair.create(error, sign));
         }
 

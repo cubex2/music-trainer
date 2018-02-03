@@ -6,7 +6,7 @@ import cubex2.musictrainer.R;
 public enum ErrorType
 {
     DURATION(R.string.error_type_duration_positive, R.string.error_type_duration_negative, ErrorType::applyDurationError, 0.01f, 0.01f, 10),
-    VOLUME(R.string.error_type_volume_negative, R.string.error_type_volume_negative, ErrorType::applyVolumeError, 0.05f, 0.05f, 10);
+    VOLUME(R.string.error_type_volume_positive, R.string.error_type_volume_negative, ErrorType::applyVolumeError, 0.05f, 0.05f, 10);
 
     private final ErrorFunction errorFunction;
     private final int displayNamePositive;
@@ -56,8 +56,8 @@ public enum ErrorType
 
     private static void applyVolumeError(int sign, @NonNull Difficulty difficulty, @NonNull PlayableTone tone)
     {
-        float error = difficulty.getVolumeError();
-        tone.setVolume(tone.getVolume() - error);
+        float error = sign * difficulty.getVolumeError();
+        tone.setVolume(tone.getVolume() * (1f + error));
     }
 
     interface ErrorFunction

@@ -148,6 +148,7 @@
 
     <string name="error_type_duration_positive">Too long</string>
     <string name="error_type_duration_negative">Too short</string>
+    <string name="error_type_volume_positive">Too loud</string>
     <string name="error_type_volume_negative">Too quiet</string>
 
     <string name="error_type_duration">Tone Duration</string>
