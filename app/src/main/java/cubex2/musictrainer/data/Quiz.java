@@ -1,5 +1,6 @@
 package cubex2.musictrainer.data;
 
+import android.util.Pair;
 import cubex2.musictrainer.Util;
 
 import java.util.*;
@@ -9,7 +10,7 @@ public class Quiz
     private static final float TONE_VOLUME = 1f;
 
     public final Difficulty difficulty;
-    private final Map<Integer, ErrorType> errorIndices;
+    private final Map<Integer, Pair<ErrorType, Integer>> errors;
     private final List<ErrorType> activeErrors;
     private final ToneSequence sequence;
     private PlayableTone[] tones;
@@ -21,7 +22,7 @@ public class Quiz
         this.activeErrors = difficulty.getErrorTypes();
         int numErrors = Util.randomInRange(1, difficulty.getMaxErrors());
 
-        errorIndices = computeErrorIndices(numErrors, 0, sequence.getTones().size() - 1);
+        errors = computeErrors(numErrors, 0, sequence.getTones().size() - 1);
 
         initErrors(sequence, difficulty.getToneDuration());
     }
@@ -35,7 +36,7 @@ public class Quiz
             tones[i] = new PlayableTone(sequence.getTones().get(i), toneDuration, TONE_VOLUME);
         }
 
-        applyErrors(errorIndices);
+        applyErrors(errors);
     }
 
     public ToneSequence getSequence()
@@ -64,11 +65,11 @@ public class Quiz
 
         for (Integer tone : selectedTones)
         {
-            if (!errorIndices.containsKey(tone))
+            if (!errors.containsKey(tone))
                 incorrectlySelected.add(tone);
         }
 
-        for (Integer index : errorIndices.keySet())
+        for (Integer index : errors.keySet())
         {
             if (!selectedTones.contains(index))
                 incorrectlyNotSelected.add(index);
@@ -76,33 +77,47 @@ public class Quiz
 
         return new Report(incorrectlySelected,
                           incorrectlyNotSelected,
-                          errorIndices);
+                          errors);
     }
 
-    private void applyErrors(Map<Integer, ErrorType> errorIndices)
+    private void applyErrors(Map<Integer, Pair<ErrorType, Integer>> errorIndices)
     {
-        for (Map.Entry<Integer, ErrorType> entry : errorIndices.entrySet())
+        for (Map.Entry<Integer, Pair<ErrorType, Integer>> entry : errorIndices.entrySet())
         {
             int index = entry.getKey();
-            ErrorType error = entry.getValue();
+            ErrorType error = entry.getValue().first;
+            int sign = entry.getValue().second;
 
             PlayableTone tone = tones[index];
-            error.apply(difficulty, tone);
+            error.apply(sign, difficulty, tone);
         }
     }
 
-    private Map<Integer, ErrorType> computeErrorIndices(int num, int minIndex, int maxIndex)
+    private Map<Integer, Pair<ErrorType, Integer>> computeErrors(int num, int minIndex, int maxIndex)
     {
-        Map<Integer, ErrorType> indices = new HashMap<>();
+        Map<Integer, Pair<ErrorType, Integer>> indices = new HashMap<>();
 
         while (indices.size() < num)
         {
             int index = Util.randomInRange(minIndex, maxIndex);
             ErrorType error = Util.randomElement(activeErrors);
-            indices.put(index, error);
+            int sign = error == ErrorType.VOLUME ? 1 : Util.randomSign();
+            indices.put(index, Pair.create(error, sign));
         }
 
         return indices;
+    }
+
+    private Map<Integer, Integer> computeErrorSigns()
+    {
+        Map<Integer, Integer> signs = new HashMap<>();
+
+        for (Integer index : errors.keySet())
+        {
+            signs.put(index, Util.randomSign());
+        }
+
+        return signs;
     }
 
     public static Quiz fromDifficulty(Difficulty difficulty, int minTone, int maxTone)
@@ -127,10 +142,10 @@ public class Quiz
 
     public static class Report
     {
-        public final Map<Integer, ErrorType> allErrors;
+        public final Map<Integer, Pair<ErrorType, Integer>> allErrors;
         public final Set<Integer> errors = new HashSet<>();
 
-        public Report(Set<Integer> incorrectlySelected, Set<Integer> incorrectlyNotSelected, Map<Integer, ErrorType> errors)
+        public Report(Set<Integer> incorrectlySelected, Set<Integer> incorrectlyNotSelected, Map<Integer, Pair<ErrorType, Integer>> errors)
         {
             this.errors.addAll(incorrectlySelected);
             this.errors.addAll(incorrectlyNotSelected);
@@ -146,7 +161,7 @@ public class Quiz
         {
             for (Integer index : errors)
             {
-                if (allErrors.containsKey(index) && allErrors.get(index) == errorType)
+                if (allErrors.containsKey(index) && allErrors.get(index).first == errorType)
                     return true;
             }
 
@@ -155,9 +170,9 @@ public class Quiz
 
         public boolean hasError(ErrorType errorType)
         {
-            for (ErrorType type : allErrors.values())
+            for (Pair<ErrorType, Integer> error : allErrors.values())
             {
-                if (type == errorType)
+                if (error.first == errorType)
                     return true;
             }
 

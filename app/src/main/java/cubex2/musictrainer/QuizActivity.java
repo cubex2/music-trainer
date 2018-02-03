@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -372,8 +373,10 @@ public class QuizActivity extends AppCompatActivity
 
                 if (report.allErrors.containsKey(position))
                 {
-                    ErrorType type = report.allErrors.get(position);
-                    textView.setText(type.displayName);
+                    Pair<ErrorType, Integer> error = report.allErrors.get(position);
+                    ErrorType type = error.first;
+                    int sign = error.second;
+                    textView.setText(type.getDisplayName(sign));
                 }
             } else
             {
