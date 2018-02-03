@@ -108,18 +108,6 @@ public class Quiz
         return indices;
     }
 
-    private Map<Integer, Integer> computeErrorSigns()
-    {
-        Map<Integer, Integer> signs = new HashMap<>();
-
-        for (Integer index : errors.keySet())
-        {
-            signs.put(index, Util.randomSign());
-        }
-
-        return signs;
-    }
-
     public static Quiz fromDifficulty(Difficulty difficulty, int minTone, int maxTone)
     {
         ToneSequence sequence;
@@ -142,26 +130,36 @@ public class Quiz
 
     public static class Report
     {
-        public final Map<Integer, Pair<ErrorType, Integer>> allErrors;
-        public final Set<Integer> errors = new HashSet<>();
+        public final Map<Integer, Pair<ErrorType, Integer>> errors;
+        private final Set<Integer> mistakes = new HashSet<>();
 
         public Report(Set<Integer> incorrectlySelected, Set<Integer> incorrectlyNotSelected, Map<Integer, Pair<ErrorType, Integer>> errors)
         {
-            this.errors.addAll(incorrectlySelected);
-            this.errors.addAll(incorrectlyNotSelected);
-            this.allErrors = Collections.unmodifiableMap(errors);
+            this.mistakes.addAll(incorrectlySelected);
+            this.mistakes.addAll(incorrectlyNotSelected);
+            this.errors = Collections.unmodifiableMap(errors);
+        }
+
+        public boolean isMistake(int index)
+        {
+            return mistakes.contains(index);
+        }
+
+        public boolean isError(int index)
+        {
+            return errors.containsKey(index);
         }
 
         public boolean hasMistakes()
         {
-            return errors.size() > 0;
+            return mistakes.size() > 0;
         }
 
         public boolean hasMistake(ErrorType errorType)
         {
-            for (Integer index : errors)
+            for (Integer index : mistakes)
             {
-                if (allErrors.containsKey(index) && allErrors.get(index).first == errorType)
+                if (errors.containsKey(index) && errors.get(index).first == errorType)
                     return true;
             }
 
@@ -170,7 +168,7 @@ public class Quiz
 
         public boolean hasError(ErrorType errorType)
         {
-            for (Pair<ErrorType, Integer> error : allErrors.values())
+            for (Pair<ErrorType, Integer> error : errors.values())
             {
                 if (error.first == errorType)
                     return true;

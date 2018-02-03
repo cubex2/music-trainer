@@ -351,39 +351,51 @@ public class QuizActivity extends AppCompatActivity
             checkBox.setChecked(tonesChecked[position]);
 
             TextView textView = holder.getTextView();
-            textView.setText("");
+            textView.setText(textForPosition(position));
 
-            if (playingSound == position)
-            {
-                convertView.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.quizPlaying, null));
-            } else if (report != null)
-            {
-                if (report.errors.contains(position))
-                {
-                    convertView.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.quizRed, null));
-
-                    if (!report.allErrors.containsKey(position))
-                    {
-                        textView.setText(R.string.correct_tone);
-                    }
-                } else
-                {
-                    convertView.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.quizGreen, null));
-                }
-
-                if (report.allErrors.containsKey(position))
-                {
-                    Pair<ErrorType, Integer> error = report.allErrors.get(position);
-                    ErrorType type = error.first;
-                    int sign = error.second;
-                    textView.setText(type.getDisplayName(sign));
-                }
-            } else
-            {
-                convertView.setBackgroundColor(android.R.color.white);
-            }
+            convertView.setBackgroundColor(ResourcesCompat.getColor(getResources(), colorKeyForPosition(position), null));
 
             return convertView;
+        }
+
+        private int colorKeyForPosition(int position)
+        {
+            if (playingSound == position)
+            {
+                return R.color.quizPlaying;
+            }
+
+            if (report == null)
+            {
+                return android.R.color.white;
+            }
+
+            if (report.isMistake(position))
+            {
+                return R.color.quizRed;
+            } else
+            {
+                return R.color.quizGreen;
+            }
+        }
+
+        private String textForPosition(int position)
+        {
+            if (report == null)
+                return "";
+
+            if (report.isError(position))
+            {
+                Pair<ErrorType, Integer> error = report.errors.get(position);
+                ErrorType type = error.first;
+                int sign = error.second;
+                return getString(type.getDisplayName(sign));
+            } else if (report.isMistake(position))
+            {
+                return getString(R.string.correct_tone);
+            }
+
+            return "";
         }
     }
 
