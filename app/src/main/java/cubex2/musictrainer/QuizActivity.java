@@ -211,6 +211,7 @@ public class QuizActivity extends AppCompatActivity
         {
             tvDuration.setTextColor(0xff000000);
             tvVolume.setTextColor(0xff000000);
+            tvToneDuration.setTextColor(0xff000000);
             seekBarToneDuration.setEnabled(true);
             seekBarDuration.setEnabled(true);
             seekBarVolume.setEnabled(true);
